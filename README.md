@@ -1,7 +1,28 @@
 # quiz
 
-Färdiga quiz att dela med barnen.
+Färdiga quiz att dela med barnen som sms-länk.
 
-Varje quiz är en enda HTML-fil i en egen mapp, döpt till `index.html`, till exempel `biologi-vecka-44/index.html`. Det quizet får länken https://lovemoguls.github.io/quiz/biologi-vecka-44/, som går att skicka som sms.
+## Namnregel
 
-Quizen byggs i det privata repot `quizmotor`. Hit kopieras bara de färdiga HTML-filerna. Repot är publikt, så lägg aldrig namn, betyg eller andra personuppgifter här.
+Varje quiz får en egen mapp: `barn-ämne-vVECKA`, med gemener och bindestreck och utan å, ä eller ö.
+
+- `vanessa-biologi-v44`
+- `bella-matte-v45`
+- `charles-engelska-v46`
+
+## Struktur
+
+```
+quiz/
+├── index.html                  startsida (ingen länklista)
+├── README.md
+└── vanessa-biologi-v44/
+    └── index.html              det färdiga quizet, en enda fil
+```
+
+Länken blir `https://lovemoguls.github.io/quiz/vanessa-biologi-v44/`.
+
+## Regler
+
+- Quizen byggs i det privata repot `quizmotor`. Hit kopieras bara den färdiga HTML-filen, döpt till `index.html`.
+- Repot är publikt. Lägg aldrig betyg, svar från barnen eller andra personuppgifter här.
