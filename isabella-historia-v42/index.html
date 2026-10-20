@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Blixtkrigen 1864</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .question:last-child {
+            border-bottom: none;
+        }
+        .question-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option {
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f9f9f9;
+        }
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        .option input {
+            margin-right: 10px;
+        }
+        .btn {
+            display: block;
+            width: 200px;
+            margin: 30px auto 0;
+            padding: 12px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn:hover {
+            background: #5568d3;
+        }
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f4ff;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .result.show {
+            display: block;
+        }
+        .result.correct {
+            background: #d4edda;
+            color: #155724;
+        }
+        .result.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Quiz: Blixtkrigen 1864</h1>
+        <p class="subtitle">Världshistoria - Årskurs 8</p>
+        
+        <form id="quizForm">
+            <div class="question">
+                <div class="question-title">1. Vilka länder krossade Danmark i Blixtkrigen 1864?</div>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q1" value="a"> Preussen och Österrike</label>
+                    <label class="option"><input type="radio" name="q1" value="b"> Sverige och Norge</label>
+                    <label class="option"><input type="radio" name="q1" value="c"> Frankrike och Italien</label>
+                    <label class="option"><input type="radio" name="q1" value="d"> England och Ryssland</label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-title">2. Vad var den huvudsakliga orsaken till Blixtkrigen?</div>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q2" value="a"> Religiösa motsättningar</label>
+                    <label class="option"><input type="radio" name="q2" value="b"> Strid om Schleswig och Holstein</label>
+                    <label class="option"><input type="radio" name="q2" value="c"> Handelskonkurrens</label>
+                    <label class="option"><input type="radio" name="q2" value="d"> Sjömannarätten</label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-title">3. Hur lång tid varade Blixtkrigen?</div>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q3" value="a"> 2 veckor</label>
+                    <label class="option"><input type="radio" name="q3" value="b"> 3 månader</label>
+                    <label class="option"><input type="radio" name="q3" value="c"> 1 år</label>
+                    <label class="option"><input type="radio" name="q3" value="d"> 2 år</label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-title">4. Vilken tysk stat ledde kriget mot Danmark?</div>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q4" value="a"> Preussen</label>
+                    <label class="option"><input type="radio" name="q4" value="b"> Bayern</label>
+                    <label class="option"><input type="radio" name="q4" value="c"> Hessen</label>
+                    <label class="option"><input type="radio" name="q4" value="d"> Württemberg</label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-title">5. Vilka territorier förlorade Danmark efter kriget?</div>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q5" value="a"> Island och Grönland</label>
+                    <label class="option"><input type="radio" name="q5" value="b"> Schleswig och Holstein</label>
+                    <label class="option"><input type="radio" name="q5" value="c"> Bornholm</label>
+                    <label class="option"><input type="radio" name="q5" value="d"> Färöarna</label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-title">6. Vad var en viktig konsekvens för Danmark efter Blixtkrigen?</div>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q6" value="a"> Danmark blev en stormakt</label>
+                    <label class="option"><input type="radio" name="q6" value="b"> Danmark förlorade territorier och makt</label>
+                    <label class="option"><input type="radio" name="q6" value="c"> Danmark återfick sitt imperium</label>
+                    <label class="option"><input type="radio" name="q6" value="d"> Danmark gick med i Tyskland</label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-title">7. Vilken dansk kung var vid makten under Blixtkrigen?</div>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q7" value="a"> Christian VIII</label>
+                    <label class="option"><input type="radio" name="q7" value="b"> Frederik VII</label>
+                    <label class="option"><input type="radio" name="q7" value="c"> Christian IX</label>
+                    <label class="option"><input type="radio" name="q7" value="d"> Frederik VIII</label>
+                </div>
+            </div>
+
+            <div class="question">
+                <div class="question-title">8. Hur påverkade Blixtkrigen Sverige och Norge?</div>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q8" value="a"> De deltog aktivt i kriget</label>
+                    <label class="option"><input type="radio" name="q8" value="b"> De förblev neutrala men oroade sig</label>
+                    <label class="option"><input type="radio" name="q8" value="c"> De stödde Danmark militärt</label>
+                    <label class="option"><input type="radio" name="q8" value="d"> De annekterade dansk territorium</label>
+                </div>
+            </div>
+
+            <button type="button" class="btn" onclick="submitQuiz()">Se resultat</button>
+        </form>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const answers = {
+            q1: 'a',
+            q2: 'b',
+            q3: 'b',
+            q4: 'a',
+            q5: 'b',
+            q6: 'b',
+            q7: 'c',
+            q8: 'b'
+        };
+
+        function submitQuiz() {
+            let score = 0;
+            let total = Object.keys(answers).length;
+
+            for (let question in answers) {
+                const selected = document.querySelector(`input[name="${question}"]:checked`);
+                if (selected && selected.value === answers[question]) {
+                    score++;
+                }
+            }
+
+            const percentage = Math.round((score / total) * 100);
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.className = percentage >= 70 ? 'result show correct' : 'result show incorrect';
+            resultDiv.innerHTML = `
+                <h2>${percentage >= 70 ? '🎉 Bra jobbat!' : '📚 Öva mer!'}</h2>
+                <p>Du fick ${score} av ${total} rätt (${percentage}%)</p>
+                <p>${percentage >= 90 ? 'Du är en expert på historia!' : 
+                   percentage >= 70 ? 'Du förstår Blixtkrigen bra!' : 
+                   'Läs mer om Blixtkrigen och försök igen!'}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
