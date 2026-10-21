@@ -1,0 +1,1340 @@
+<!doctype html><html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>body{margin:0;font:14px system-ui}[hidden]{display:none!important}</style></head><body><title>Isabellas samhällsquiz</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fredoka:wght@500;600&display=swap">
+<style>
+/* Layout: en smal kolumn, en sak i taget, stora tryckytor.
+   Valsedelns gult och blått bär färgen. Riksdagens 349 platser visar framstegen. */
+:root{
+  --bg:#EDF2F8; --card:#FFFFFF; --ink:#14213A; --muted:#536079; --line:#CBD6E4; --seat:#C6D2E2;
+  --sun:#FFC933; --sun-deep:#B67B00; --sun-soft:#FFF2C2; --on-sun:#14213A;
+  --sea:#1D56C4; --sea-soft:#DCE7FB; --on-sea:#FFFFFF;
+  --good:#17794B; --good-soft:#DAF2E5; --bad:#B93A22; --bad-soft:#FBE3DC;
+  --paper-blue:#A9C8F5; --paper-white:#FAFAF5;
+  --display:'Fredoka','Trebuchet MS',system-ui,sans-serif;
+  --body:'Atkinson Hyperlegible',Verdana,system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1626; --card:#172238; --ink:#EDF2FA; --muted:#A5B2C9; --line:#31415F; --seat:#31415F;
+    --sun:#FFC933; --sun-deep:#FFC933; --sun-soft:#3A3111; --on-sun:#14213A;
+    --sea:#8CB2FF; --sea-soft:#1D2D52; --on-sea:#0E1626;
+    --good:#62D6A0; --good-soft:#12362A; --bad:#FF9A85; --bad-soft:#42211B;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1626; --card:#172238; --ink:#EDF2FA; --muted:#A5B2C9; --line:#31415F; --seat:#31415F;
+  --sun:#FFC933; --sun-deep:#FFC933; --sun-soft:#3A3111; --on-sun:#14213A;
+  --sea:#8CB2FF; --sea-soft:#1D2D52; --on-sea:#0E1626;
+  --good:#62D6A0; --good-soft:#12362A; --bad:#FF9A85; --bad-soft:#42211B;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1.125rem;line-height:1.5;margin:0}
+.wrap{max-width:640px;margin-inline:auto;padding-inline:16px;padding-block:20px 64px;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:2rem}
+h2{font-size:1.4rem}
+h3{font-size:1.15rem}
+p{margin:0}
+ol,ul{margin:0;padding:0;list-style:none}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--sea);outline-offset:2px}
+.eyebrow{font-family:var(--display);font-weight:500;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.small{font-size:.95rem}
+.center{text-align:center}
+.stack{display:flex;flex-direction:column;gap:12px}
+.stack-s{display:flex;flex-direction:column;gap:6px}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+
+/* Knappar */
+.btn{font-family:var(--display);font-weight:600;font-size:1.1rem;line-height:1.2;border:0;border-radius:14px;padding:14px 20px;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;width:100%}
+.btn small{font-family:var(--body);font-weight:400;font-size:.9rem;opacity:.9}
+.btn-go{background:var(--sea);color:var(--on-sea)}
+.btn-sun{background:var(--sun);color:var(--on-sun)}
+.btn-quiet{background:var(--card);border:2px solid var(--line);color:var(--ink)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn:not(:disabled):active{transform:translateY(1px)}
+.btn-link{background:none;border:0;padding:8px 0;min-height:44px;color:var(--sea);font-family:var(--display);font-weight:500;font-size:1rem;align-self:flex-start}
+.btn-las{background:none;border:2px solid var(--line);border-radius:99px;padding:6px 14px;min-height:40px;font-size:.95rem;color:var(--muted);align-self:flex-start}
+
+/* Startsidan */
+.hero{background:var(--card);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.riksdag svg{display:block;width:100%;max-width:380px;margin-inline:auto;height:auto}
+.mandat{font-family:var(--display);font-weight:500;font-size:1.15rem;text-align:center}
+.mandat b{font-weight:600;font-size:1.7rem;font-variant-numeric:tabular-nums}
+.goal{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;border-top:2px solid var(--line);padding-top:12px}
+.dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex:none}
+.dot.on{background:var(--sun);border-color:var(--sun-deep)}
+
+.del{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;background:var(--card);border:2px solid transparent;border-radius:16px;padding:12px 14px;text-align:left;width:100%}
+.del:hover{border-color:var(--sea)}
+.sedel{width:42px;height:54px;border-radius:3px;display:grid;place-items:center;font-family:var(--display);font-weight:600;font-size:1.3rem;color:var(--on-sun);box-shadow:0 0 0 1.5px var(--line)}
+.sedel.gul{background:var(--sun)}
+.sedel.bla{background:var(--paper-blue)}
+.sedel.vit{background:var(--paper-white)}
+.del-titel{font-family:var(--display);font-weight:600;font-size:1.1rem;line-height:1.2}
+.del-meta{font-size:.9rem;color:var(--muted);display:flex;justify-content:space-between;gap:8px;font-variant-numeric:tabular-nums}
+.bar{height:8px;border-radius:99px;background:var(--seat);overflow:hidden}
+.bar > i{display:block;height:100%;background:var(--sea);border-radius:99px}
+
+details.vuxna{background:var(--card);border-radius:16px;padding:14px 16px;font-size:1rem}
+details.vuxna summary{font-family:var(--display);font-weight:500;cursor:pointer}
+details.vuxna ul{list-style:disc;padding-left:20px;display:flex;flex-direction:column;gap:8px;margin-top:12px}
+details.vuxna .row{margin-top:14px}
+
+/* Delsidan */
+.steg{background:var(--card);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.runda{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:12px 14px;min-height:60px;text-align:left;width:100%}
+.runda:hover{border-color:var(--sea)}
+.runda-namn{font-family:var(--display);font-weight:500;line-height:1.2}
+.stars{display:inline-flex;gap:2px;flex:none}
+.stars svg{width:22px;height:22px}
+.stars.big svg{width:56px;height:56px}
+.stars .pa{fill:var(--sun);stroke:var(--sun-deep);stroke-width:1.2}
+.stars .av{fill:var(--seat);stroke:none}
+
+/* Quiz */
+.top{display:flex;align-items:center;gap:12px}
+.x{flex:none;width:44px;height:44px;border-radius:50%;border:2px solid var(--line);background:var(--card);font-size:1.3rem;line-height:1;display:grid;place-items:center}
+.top .bar{flex:1;height:12px}
+.top .count{font-variant-numeric:tabular-nums;font-size:.95rem;color:var(--muted);flex:none}
+.q{background:var(--card);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.tips{font-size:.95rem;color:var(--muted)}
+.q-text{font-family:var(--display);font-weight:600;font-size:1.4rem;line-height:1.25;text-wrap:balance}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opts.two{flex-direction:row}
+.opts.two .opt{justify-content:center;font-family:var(--display);font-weight:600;font-size:1.2rem}
+.opt{background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:12px 16px;min-height:56px;text-align:left;font-size:1.05rem;line-height:1.35;display:flex;align-items:center;gap:12px;width:100%;min-width:0;color:var(--ink)}
+.opt span{min-width:0;overflow-wrap:break-word;hyphens:manual}
+.opt:not(:disabled):hover{border-color:var(--sea)}
+.opt.sel{border-color:var(--sea);background:var(--sea-soft)}
+.opt.ok{border-color:var(--good);background:var(--good-soft)}
+.opt.no{border-color:var(--bad);background:var(--bad-soft)}
+.opt.miss{border-color:var(--good);border-style:dashed}
+.opt:disabled{cursor:default}
+.opt .mark{margin-left:auto;flex:none;font-family:var(--display);font-weight:600;font-size:.9rem}
+.opt.ok .mark{color:var(--good)}
+.opt.no .mark{color:var(--bad)}
+.match{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:10px;align-items:start}
+.match .opt{font-size:.95rem;padding:10px 12px;min-height:68px}
+.placed{display:flex;flex-direction:column;gap:8px;counter-reset:steg}
+.placed li{counter-increment:steg;display:flex;gap:12px;align-items:center;border:2px solid var(--good);background:var(--good-soft);border-radius:14px;padding:10px 14px;font-size:1.05rem;line-height:1.35}
+.placed li::before{content:counter(steg);font-family:var(--display);font-weight:600;color:var(--good);flex:none}
+.fb{border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.fb.ok{background:var(--good-soft)}
+.fb.no{background:var(--bad-soft)}
+.fb.ok h3{color:var(--good)}
+.fb.no h3{color:var(--bad)}
+
+/* Faktakort */
+.kort{background:var(--card);border-radius:20px;padding:24px 20px;display:flex;flex-direction:column;gap:14px;min-height:300px}
+.kort b{font-weight:700}
+.knep{background:var(--sun-soft);border-radius:12px;padding:12px 14px;margin-top:auto}
+.knep-rubrik{font-family:var(--display);font-weight:600;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;display:block}
+.parti-topp{display:flex;align-items:center;gap:14px}
+.pchip{flex:none;display:grid;place-items:center;width:60px;height:60px;border-radius:50%;font-family:var(--display);font-weight:600;font-size:1.25rem}
+.fakta{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 14px}
+.fakta dt{font-family:var(--display);font-weight:500;color:var(--muted);font-size:.95rem}
+.fakta dd{margin:0}
+.nav2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:10px}
+
+/* Förklara själv */
+.recept{display:flex;flex-wrap:wrap;gap:6px 8px}
+.recept li{font-family:var(--display);font-weight:500;font-size:.9rem;background:var(--sea-soft);border-radius:99px;padding:4px 12px}
+.check{display:flex;gap:12px;align-items:flex-start;padding:12px;border:2px solid var(--line);border-radius:12px;background:var(--bg);font-size:1rem;line-height:1.4;cursor:pointer}
+.check input{width:24px;height:24px;flex:none;margin:1px 0 0;accent-color:var(--sea)}
+.check span{min-width:0}
+.atip{background:var(--sea-soft);border-radius:12px;padding:12px 14px}
+.betyg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.betyg .btn{padding:12px 8px;font-size:1rem}
+
+.resultat{background:var(--card);border-radius:20px;padding:28px 20px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+
+/* Svit, XP, nivå och snabbrunda */
+.ikon{width:1.1em;height:1.1em;vertical-align:-.16em;fill:var(--sun);stroke:var(--sun-deep);stroke-width:1.2;flex:none}
+.status{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center}
+.chip{display:inline-block;font-family:var(--display);font-weight:500;font-size:.95rem;background:var(--sun-soft);border-radius:99px;padding:5px 12px;font-variant-numeric:tabular-nums}
+.chip b{font-weight:600}
+.chip .ikon{margin-right:3px}
+.chip.av{background:var(--bg);color:var(--muted)}
+.chip.av .ikon{fill:var(--seat);stroke:var(--muted)}
+.niva{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;font-family:var(--display);font-weight:500;font-variant-numeric:tabular-nums}
+.niva .bar > i{background:var(--sun)}
+.vinst{width:100%;align-items:center}
+.svit-chip{display:inline-flex;align-items:center;gap:2px;font-family:var(--display);font-weight:600;font-variant-numeric:tabular-nums;flex:none}
+.svit-chip[hidden]{display:none}
+.fest{font-family:var(--display);font-weight:600;font-size:1.15rem;color:var(--sun-deep);display:flex;align-items:center;gap:6px;animation:pop .45s both}
+.fb .fest{color:var(--ink)}
+.milstolpe{background:var(--sun);color:var(--on-sun);border-radius:16px;padding:14px 18px;width:100%;animation:pop .5s both}
+.resultat .riksdag{width:100%}
+.riksdag .ny{transform-box:fill-box;transform-origin:center;animation:pop .6s .3s both}
+.blitz-tal{font-family:var(--display);font-weight:600;font-size:4.5rem;line-height:1;color:var(--sea);font-variant-numeric:tabular-nums;animation:pop .5s both}
+.top .bar.blitz > i{transition:width .2s linear}
+.top.brad .bar.blitz > i{background:var(--bad)}
+.top.brad .count{color:var(--bad);font-weight:700}
+
+@keyframes skak{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes in{from{transform:translateY(8px)}to{transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.1);opacity:1}100%{transform:scale(1)}}
+@keyframes bump{50%{transform:scale(1.35)}}
+.skak,.opt.no{animation:skak .3s}
+.opt.ok,.placed li{animation:pop .3s}
+.bump{animation:bump .3s}
+.fb{animation:in .2s ease-out}
+.stars.big svg{animation:pop .4s both}
+.stars.big svg:nth-child(2){animation-delay:.15s}
+.stars.big svg:nth-child(3){animation-delay:.3s}
+@media (prefers-reduced-motion: reduce){*,*::before{animation:none!important;transition:none!important}}
+@media (max-width:420px){
+  h1{font-size:1.7rem}
+  .q{padding:16px}
+  .q-text{font-size:1.25rem}
+  .betyg{grid-template-columns:minmax(0,1fr)}
+}
+</style>
+
+<main id="app" class="wrap" lang="sv"></main>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<script>
+/* Allt innehåll i quizet. Källa: instuderingsstödet i samhällskunskap (original.txt).
+   Frågetyper:
+   mc    = välj ett svar. Rätt svar står ALLTID först i a[] (blandas när frågan visas).
+   tf    = sant eller falskt. c = true/false.
+   multi = välj flera. De n första i a[] är rätt (blandas när frågan visas).
+   match = para ihop. par = [[vänster, höger], ...]
+   order = tryck i rätt ordning. steg[] står i rätt ordning (blandas när frågan visas).
+*/
+const KONFIG = {
+  id: 'isabella-samquiz-v1',            // nyckel för sparade stjärnor, unik per quiz
+  elev: 'Isabella',
+  amne: 'Samhällskunskap',
+  matare: { antal: 349, mal: 175, enhet: 'mandat', malNamn: 'majoritet', bild: 'Riksdagens 349 platser' },
+  mjuka: ['Social|demokraterna', 'Sverige|demokraterna', 'Krist|demokraterna', 'Vänster|partiet', 'Center|partiet', 'Miljö|partiet',
+    'Tryckfrihets|förordningen', 'Yttrandefrihets|grundlagen', 'Successions|ordningen', 'Regerings|formen',
+    'Majoritets|regering', 'Minoritets|regering', 'Koalitions|regering', 'Enparti|regering', 'Stats|ministern',
+    'Des|information', 'Kommun|fullmäktige', 'Region|fullmäktige', 'stats|makten', 'Filter|bubblor', 'Nät|mobbning',
+    'Utbildnings|utskottet', 'Försvars|departementet', 'Finans|departementet', 'Riksdags|ledamot', 'Riksdags|ledamöter'],
+  vuxnaRubrik: 'För vuxna: det här är ändrat mot instuderingsbladet',
+  vuxna: [
+    '<b>Centerpartiet:</b> partiledare är Elisabeth Thand Ringqvist (sedan november 2025), inte Muharrem Demirok.',
+    '<b>Liberalerna:</b> partiledare är Simona Mohamsson (sedan juni 2025), inte Johan Pehrson.',
+    '<b>Regeringen:</b> efter valet 13 september 2026 sitter M, KD och L kvar som övergångsregering. Talmannen har gett Magdalena Andersson (S) i uppdrag att undersöka om hon kan bilda regering, och en omröstning om statsminister kan hållas tidigast 14 oktober. Quizet följer bladets svar och nämner det nya läget. Fråga läraren vilket svar som gäller på provet.',
+    '<b>Ifyllt där bladet var otydligt eller avklippt:</b> Centerpartiets symbol (fyrklöver), statens beslutande organ (riksdagen), ”folkbokförda i tre år”, statens skatter (”till exempel moms”, resten av raden saknas), Vänsterpartiets fråga ”stoppa vinster i välfärden”, Miljöpartiets placering ”grön/mitten” och slutet på meningen om näthat.',
+    '<b>Förenklat i bladet:</b> treårsregeln för utländska medborgare gäller inte medborgare i EU-länder, Norge och Island, som får rösta i kommun- och regionval direkt. Quizet följer bladet.',
+    'Kontrollerat mot nyhetsläget 3 oktober 2026.'
+  ]
+};
+
+const PARTIER = {
+  V:  { namn: 'Vänsterpartiet', ledare: 'Nooshi Dadgostar', symbol: 'Röd nejlika', skala: 'Vänster', fragor: 'Ekonomisk jämlikhet, stoppa vinster i välfärden, rättigheter.', bg: '#B5121B', fg: '#FFFFFF' },
+  S:  { namn: 'Socialdemokraterna', ledare: 'Magdalena Andersson', symbol: 'Röd ros', skala: 'Vänster/mitten', fragor: 'Stärka sjukvården och skolan, bekämpa brottslighetens orsaker.', bg: '#D8102A', fg: '#FFFFFF' },
+  MP: { namn: 'Miljöpartiet', ledare: 'Amanda Lind och Daniel Helldén (två språkrör)', symbol: 'Maskros', skala: 'Grön/mitten', fragor: 'Klimatåtgärder, förnybar energi, biologisk mångfald.', bg: '#3F8A2B', fg: '#FFFFFF' },
+  C:  { namn: 'Centerpartiet', ledare: 'Elisabeth Thand Ringqvist', symbol: 'Fyrklöver', skala: 'Mitten/höger', fragor: 'Landsbygd, företagande, grön liberalism.', bg: '#0A7B3E', fg: '#FFFFFF' },
+  L:  { namn: 'Liberalerna', ledare: 'Simona Mohamsson', symbol: 'Blåklint', skala: 'Mitten/höger', fragor: 'Skolpolitik (ordning och betyg), integration, individens frihet.', bg: '#0069B4', fg: '#FFFFFF' },
+  M:  { namn: 'Moderaterna', ledare: 'Ulf Kristersson', symbol: 'Blått M', skala: 'Höger', fragor: 'Sänkta skatter, hårdare tag mot brott, kärnkraft och energi.', bg: '#1B75AD', fg: '#FFFFFF' },
+  KD: { namn: 'Kristdemokraterna', ledare: 'Ebba Busch', symbol: 'Vitsippa', skala: 'Höger', fragor: 'Sjukvård (statligt ansvar), familjestöd, äldreomsorg.', bg: '#1F2F7A', fg: '#FFFFFF' },
+  SD: { namn: 'Sverigedemokraterna', ledare: 'Jimmie Åkesson', symbol: 'Blåsippa', skala: 'Höger', fragor: 'Stram invandringspolitik, hårdare straff, svensk kultur och trygghet.', bg: '#F2D21B', fg: '#14213A' }
+};
+
+/* Gör ett profilkort av ett parti */
+function partiKort(k) {
+  const p = PARTIER[k];
+  return { profil: { chip: k, rubrik: p.namn, bg: p.bg, fg: p.fg, rader: [['Ledare', p.ledare], ['Symbol', p.symbol], ['Skala', p.skala], ['Frågor', p.fragor]] } };
+}
+
+const DELAR = [
+/* ───────────────────────── DEL 1 ───────────────────────── */
+{
+  id: 'd1',
+  titel: 'Statsskick och styrelseskick',
+  kort: [
+    { h: 'Två frågor om varje land', t: ['<b>Fråga 1: Vem har makten?</b> Folket (demokrati) eller en liten grupp (diktatur).', '<b>Fråga 2: Hur får landet sin statschef?</b> Genom val (republik) eller genom arv (monarki).'], knep: 'Varje land får två ord. Sverige: demokrati + monarki.' },
+    { h: 'Demokrati', t: ['Betyder <b>folkstyre</b>.', 'Makten utgår från folket. Folket väljer sina ledare i fria och rättvisa val.'], knep: 'På grekiska: demos = folk, kratos = styre. Folk-styre.' },
+    { h: 'Diktatur', t: ['Motsatsen till demokrati.', 'En person eller en liten grupp har <b>all makt</b> och kan <b>inte röstas bort</b>.'], knep: 'Diktatorn dikterar. Ingen kan rösta bort diktatorn.' },
+    { h: 'Republik', t: ['Statschefen <b>väljs</b> av folket eller parlamentet.', 'Oftast är statschefen en president.', 'Exempel: USA och Finland.'], knep: 'Republik = vald president.' },
+    { h: 'Monarki', t: ['Statschefen är en kung, drottning eller kejsare.', 'Titeln <b>ärvs</b> inom släkten.', 'Exempel: Sverige och Storbritannien.'], knep: 'Monarki = kronan går i arv.' },
+    { h: 'Fyra länder', t: ['<b>USA:</b> demokratisk republik. Folket väljer en president och makten är uppdelad.', '<b>Kina:</b> diktatorisk republik. En enpartistat där det kommunistiska partiet har all makt.', '<b>Storbritannien:</b> demokratisk monarki. Kung eller drottning är statschef utan politisk makt. Landet styrs av ett demokratiskt parlament.', '<b>Sverige:</b> demokratisk monarki. En konstitutionell monarki där kungen bara har ceremoniella uppgifter.'], knep: 'Ställ de två frågorna: Vem har makten? Hur utses statschefen?' },
+    { h: 'Representativ demokrati', t: ['Folket styr inte direkt i alla frågor.', 'Folket väljer <b>representanter</b> (politiker) som fattar besluten åt dem. Till exempel riksdagen.'], knep: 'Representant = någon som för din talan.' },
+    { h: 'Parlamentarism', t: ['Regeringen måste ha <b>stöd av</b>, eller åtminstone <b>accepteras av</b>, parlamentet (riksdagen) för att få styra.', 'Om riksdagen saknar förtroende för regeringen måste regeringen <b>avgå</b>.'], knep: 'Parlament-arism: parlamentet (riksdagen) kan få regeringen att avgå.' },
+    { h: 'Maktdelningsprincipen', t: ['Makten i en stat delas mellan tre parter:', '<b>Parlamentet</b> stiftar lagar.', '<b>Regeringen</b> styr landet och genomför lagarna.', '<b>Domstolarna</b> dömer efter lagarna.', 'Syftet är att förhindra diktatur och maktmissbruk.'], knep: 'Stifta, styra, döma. Tre parter. Ingen får göra allt.' },
+    { h: 'Sveriges tre högsta poster', t: ['<b>Statsministern:</b> regeringens chef. Leder och styr landet i det dagliga arbetet.', '<b>Talmannen:</b> riksdagens ordförande och ledare. Formellt den högsta valda posten i Sverige efter kungen.', '<b>Statschefen:</b> kungen. Har ingen politisk makt men är landets högsta formella representant.', 'Namn just nu (oktober 2026): statsminister Ulf Kristersson, som leder en övergångsregering efter valet. Talman Andreas Norlén. Statschef kung Carl XVI Gustaf.'], knep: 'Regeringen har statsministern. Riksdagen har talmannen. Hela landet har kungen.' },
+    { h: 'Sveriges statschef', t: ['Sveriges statschef är <b>kung Carl XVI Gustaf</b>.', 'Han har bara representativa och ceremoniella uppgifter.', 'Han fattar inga politiska beslut.'], knep: 'Kungen representerar. Politikerna bestämmer.' },
+    { h: 'Svåra ord i del 1', t: ['<b>Statsskick:</b> hur ett land är uppbyggt och styrs.', '<b>Konstitutionell monarki:</b> en monarki där grundlagen begränsar kungens makt.', '<b>Ceremoniella uppgifter:</b> högtidliga uppgifter, till exempel att ta emot statsbesök.', '<b>Representativa uppgifter:</b> att visa upp och tala för Sverige.', '<b>Enpartistat:</b> ett land där bara ett parti får styra.', '<b>Stifta lagar:</b> besluta om nya lagar.', '<b>Formellt:</b> enligt reglerna, på papperet.'] }
+  ],
+  rundor: [
+    { namn: 'Fyra viktiga ord', q: [
+      { t: 'mc', q: 'Vad betyder ordet demokrati?', a: ['Folkstyre', 'Kungastyre', 'Envälde', 'Lagstyre'], why: 'Demokrati betyder folkstyre. Makten utgår från folket.' },
+      { t: 'mc', q: 'Vad stämmer om en diktatur?', a: ['En person eller en liten grupp har all makt och kan inte röstas bort', 'Folket väljer sina ledare i fria och rättvisa val vart fjärde år', 'Statschefen är alltid en kung eller drottning som ärver titeln', 'Makten delas alltid mellan parlament, regering och domstolar'], why: 'Diktatur är motsatsen till demokrati. Den som har makten kan inte röstas bort.' },
+      { t: 'match', q: 'Para ihop ordet med rätt förklaring.', par: [['Demokrati', 'Folket väljer ledare i fria och rättvisa val'], ['Diktatur', 'En person eller liten grupp har all makt'], ['Republik', 'Statschefen väljs av folket eller parlamentet'], ['Monarki', 'Kung, drottning eller kejsare ärver titeln']], why: 'Demokrati och diktatur handlar om vem som har makten. Republik och monarki handlar om hur statschefen utses.' },
+      { t: 'tf', q: 'I en republik ärver statschefen sin titel inom släkten.', c: false, why: 'Så är det i en monarki. I en republik väljs statschefen, oftast en president.' },
+      { t: 'mc', q: 'Vilka två länder är exempel på republiker?', a: ['USA och Finland', 'Sverige och Storbritannien', 'Sverige och Finland', 'Storbritannien och USA'], why: 'USA och Finland har presidenter som väljs. Sverige och Storbritannien är monarkier.' },
+      { t: 'mc', q: 'Vilka två länder är exempel på monarkier?', a: ['Sverige och Storbritannien', 'USA och Storbritannien', 'Sverige och Finland', 'Kina och Finland'], why: 'I Sverige och Storbritannien ärvs titeln som statschef inom släkten.' }
+    ] },
+    { namn: 'Länder och statsskick', q: [
+      { t: 'mc', q: 'Vilket statsskick har USA?', a: ['Demokratisk republik', 'Demokratisk monarki', 'Diktatorisk republik', 'Diktatorisk monarki'], why: 'Folket väljer en president och makten är uppdelad.' },
+      { t: 'mc', q: 'Vilket statsskick har Kina?', a: ['Diktatorisk republik', 'Demokratisk republik', 'Demokratisk monarki', 'Diktatorisk monarki'], why: 'Kina är en enpartistat. Det kommunistiska partiet har all makt. Landet har ingen kung, så det är en republik.' },
+      { t: 'mc', q: 'Varför räknas Kina som en diktatur?', a: ['Det kommunistiska partiet har all makt', 'Landet har en kung som bestämmer allt', 'Folket kan rösta bort sina ledare', 'Makten är delad mellan tre parter'], why: 'Kina är en enpartistat. Ett enda parti, det kommunistiska partiet, har all makt och kan inte röstas bort.' },
+      { t: 'mc', q: 'Vilket statsskick har Storbritannien?', a: ['Demokratisk monarki', 'Demokratisk republik', 'Diktatorisk republik', 'Diktatorisk monarki'], why: 'Kungen eller drottningen är statschef utan politisk makt. Landet styrs av ett demokratiskt parlament.' },
+      { t: 'mc', q: 'Vilket statsskick har Sverige?', a: ['Demokratisk monarki', 'Demokratisk republik', 'Diktatorisk republik', 'Diktatorisk monarki'], why: 'Sverige är en demokrati med en kung som statschef. Det kallas också konstitutionell monarki.' },
+      { t: 'tf', q: 'Ett land kan vara både en demokrati och en monarki.', c: true, why: 'Sverige och Storbritannien är exempel. Folket har makten, men statschefen ärver sin titel.' }
+    ] },
+    { namn: 'Så styrs en demokrati', q: [
+      { t: 'mc', q: 'Vad menas med representativ demokrati?', a: ['Folket väljer representanter som fattar besluten åt dem', 'Folket röstar själva om varje enskild fråga i landet', 'Kungen väljer vilka personer som ska styra landet', 'Bara ett enda parti får ställa upp i valen'], why: 'Folket styr inte direkt i alla frågor. Vi väljer politiker, till exempel till riksdagen, som fattar besluten åt oss.' },
+      { t: 'mc', q: 'Vad menas med parlamentarism?', a: ['Regeringen måste ha stöd av, eller accepteras av, riksdagen', 'Riksdagen måste alltid lyda det regeringen bestämmer', 'Kungen utser regeringen utan att fråga riksdagen', 'Domstolarna bestämmer vilka som får sitta i regeringen'], why: 'Regeringen får bara styra så länge parlamentet (riksdagen) stöder eller accepterar den.' },
+      { t: 'tf', q: 'Om riksdagen saknar förtroende för regeringen måste regeringen avgå.', c: true, why: 'Det är kärnan i parlamentarismen.' },
+      { t: 'match', q: 'Maktdelning. Vem gör vad?', par: [['Parlamentet', 'Stiftar lagar'], ['Regeringen', 'Styr landet och genomför lagarna'], ['Domstolarna', 'Dömer efter lagarna']], why: 'Makten delas mellan tre parter så att ingen kan bestämma allt.' },
+      { t: 'mc', q: 'Varför delar man upp makten mellan tre parter?', a: ['För att förhindra diktatur och maktmissbruk', 'För att besluten ska kunna fattas snabbare', 'För att kungen ska få mer politisk makt', 'För att det ska kosta mindre pengar'], why: 'Om en enda part hade all makt skulle den lätt kunna missbruka den.' }
+    ] },
+    { namn: 'De tre högsta posterna', q: [
+      { t: 'match', q: 'Para ihop posten med rätt beskrivning.', par: [['Statsministern', 'Regeringens chef'], ['Talmannen', 'Riksdagens ordförande och ledare'], ['Statschefen', 'Kungen, landets högsta formella representant']], why: 'Statsministern leder regeringen, talmannen leder riksdagen och kungen är statschef.' },
+      { t: 'mc', q: 'Vem är Sveriges statschef?', a: ['Kung Carl XVI Gustaf', 'Statsministern', 'Talmannen', 'Kronprinsessan Victoria'], why: 'Kung Carl XVI Gustaf är statschef.' },
+      { t: 'mc', q: 'Sverige är en konstitutionell monarki. Vad betyder det för kungen?', a: ['Kungen har bara ceremoniella uppgifter', 'Kungen bestämmer över regeringen', 'Kungen väljs av folket vart fjärde år', 'Kungen stiftar landets lagar'], why: 'Kungen är statschef men har ingen politisk makt.' },
+      { t: 'mc', q: 'Vilka uppgifter har kungen?', a: ['Representativa och ceremoniella uppgifter', 'Politiska och ekonomiska uppgifter', 'Dömande och lagstiftande uppgifter', 'Militära och polisiära uppgifter'], why: 'Kungen har bara representativa och ceremoniella uppgifter. Han fattar inga politiska beslut.' },
+      { t: 'mc', q: 'Vilken är formellt den högsta valda posten i Sverige efter kungen?', a: ['Talmannen', 'Statsministern', 'Finansministern', 'Partiledaren för största partiet'], why: 'Talmannen är riksdagens ordförande och formellt den högsta valda posten efter kungen.' },
+      { t: 'mc', q: 'Vad gör statsministern?', a: ['Leder regeringen och styr landet i det dagliga arbetet', 'Leder debatterna och ser till att riksdagens regler följs', 'Dömer i domstol efter de lagar som riksdagen stiftat', 'Representerar landet men har ingen politisk makt'], why: 'Statsministern är regeringens chef.' }
+    ] }
+  ],
+  forklara: [
+    { q: 'Förklara begreppen demokrati, diktatur, republik och monarki.', punkter: ['Demokrati betyder folkstyre. Makten utgår från folket som väljer sina ledare i fria och rättvisa val.', 'Diktatur är motsatsen. En person eller en liten grupp har all makt och kan inte röstas bort.', 'Republik: statschefen väljs av folket eller parlamentet, oftast en president. Exempel: USA, Finland.', 'Monarki: statschefen är kung, drottning eller kejsare och titeln ärvs inom släkten. Exempel: Sverige, Storbritannien.'], a: 'Visa mönstret: demokrati och diktatur handlar om vem som har makten. Republik och monarki handlar om hur statschefen utses. Därför kan ett land vara demokrati och monarki samtidigt, som Sverige.' },
+    { q: 'Vad menas med representativ demokrati, parlamentarism och maktdelningsprincipen?', punkter: ['Representativ demokrati: folket styr inte direkt i alla frågor utan väljer representanter (politiker) som fattar besluten åt dem, till exempel riksdagen.', 'Parlamentarism: regeringen måste ha stöd av, eller åtminstone accepteras av, riksdagen för att få styra. Saknar riksdagen förtroende måste regeringen avgå.', 'Maktdelningsprincipen: makten delas mellan tre parter. Parlamentet stiftar lagar, regeringen styr landet och genomför lagarna, domstolarna dömer efter lagarna.', 'Maktdelningen finns för att förhindra diktatur och maktmissbruk.'], a: 'Koppla ihop dem i en kedja: folket väljer riksdagen (representativ demokrati). Riksdagen måste acceptera regeringen (parlamentarism). Så går makten från folket hela vägen till regeringen.' },
+    { q: 'Avgör några stora och kända länders statsskick utifrån begreppen demokrati, diktatur, monarki och republik.', punkter: ['USA: demokratisk republik. Folket väljer en president och makten är uppdelad.', 'Kina: diktatorisk republik. Enpartistat där det kommunistiska partiet har all makt.', 'Storbritannien: demokratisk monarki. Kung eller drottning är statschef utan politisk makt. Landet styrs av ett demokratiskt parlament.', 'Sverige: demokratisk monarki. Konstitutionell monarki där kungen bara har ceremoniella uppgifter.'], a: 'Säg varför för varje land. Exempel: Kina är en republik eftersom landet inte har någon kung, men en diktatur eftersom ett enda parti har all makt.' },
+    { q: 'Vilka är de tre högsta politiska posterna i Sveriges demokrati?', punkter: ['Statsministern: regeringens chef, leder och styr landet i det dagliga arbetet.', 'Talmannen: riksdagens ordförande och ledare. Formellt den högsta valda posten efter kungen.', 'Statschefen: kungen. Har ingen politisk makt men är landets högsta formella representant.'], a: 'Skilj på formell rang och verklig makt. Kungen står högst formellt men har ingen politisk makt. Statsministern har mest makt i vardagen.' },
+    { q: 'Vem är Sveriges statschef?', punkter: ['Kung Carl XVI Gustaf.', 'Han har endast representativa och ceremoniella uppgifter.', 'Han fattar inga politiska beslut.'], a: 'Lägg till begreppet: Sverige är en konstitutionell monarki. Därför är kungen statschef utan att ha politisk makt.' }
+  ]
+},
+
+/* ───────────────────────── DEL 2 ───────────────────────── */
+{
+  id: 'd2',
+  titel: 'Grundlagarna',
+  kort: [
+    { h: 'Fyra grundlagar', t: ['Sverige har fyra grundlagar. De står <b>över alla andra lagar</b>.', '<b>R</b>egeringsformen (RF)', '<b>S</b>uccessionsordningen (SO)', '<b>T</b>ryckfrihetsförordningen (TF)', '<b>Y</b>ttrandefrihetsgrundlagen (YGL)'], knep: 'R, S, T, Y. De kommer i bokstavsordning.' },
+    { h: 'Regeringsformen (RF)', t: ['Den <b>viktigaste</b> grundlagen.', 'Beskriver hur Sverige ska styras och hur val går till.', 'Beskriver hur regeringen och riksdagen fungerar.', 'Beskriver vilka demokratiska rättigheter medborgarna har.'], knep: 'Regeringsformen = formen (reglerna) för hur landet regeras.' },
+    { h: 'Successionsordningen (SO)', t: ['Bestämmer reglerna för vem som får <b>ärva den svenska tronen</b> och bli statschef (kung eller drottning).'], knep: 'Succession = att ta över efter någon. Ordningen för vem som blir kung eller drottning.' },
+    { h: 'Tryckfrihetsförordningen (TF)', t: ['Alla har rätt att <b>trycka och sprida</b> böcker, tidningar och skrifter.', 'Staten får inte förhandsgranska eller <b>censurera</b> dem.', 'Här finns också <b>offentlighetsprincipen</b>: alla har rätt att läsa myndigheters dokument.'], knep: 'Tryck = papper. Offentlig = öppet för alla.' },
+    { h: 'Yttrandefrihetsgrundlagen (YGL)', t: ['Fungerar som tryckfrihetsförordningen.', 'Men den gäller för <b>digitala medier, tv, radio, film och webbplatser</b>.'], knep: 'TF = på papper. YGL = på skärm och i högtalare.' },
+    { h: 'Varför är grundlagarna så viktiga?', t: ['De är <b>samhällets fundament</b>.', 'De skyddar vår demokrati och våra mänskliga rättigheter.', 'De fungerar som en <b>broms</b>. Ett parti som tillfälligt får majoritet i riksdagen kan inte snabbt avskaffa demokratin eller ta bort medborgarnas friheter.'], knep: 'Grundlag = husets grund. Den river man inte i en handvändning.' },
+    { h: 'Så ändras en grundlag', t: ['Riksdagen måste fatta <b>två likadana beslut</b>.', 'Mellan besluten ska det vara ett <b>allmänt riksdagsval</b>.', 'Då får folket en chans att rösta och tycka till innan det andra, avgörande beslutet.'], knep: 'Som en macka: Beslut, Val, Beslut.' },
+    { h: 'Varför ska det vara svårt?', t: ['Det skyddar demokratin mot <b>förhastade beslut</b>.', 'Det skyddar mot politiska krafter (till exempel extremism) som vill montera ner demokratins spelregler efter att ha vunnit ett enda val.', 'Det ska krävas en <b>långsiktig och stabil majoritet</b> bland folket för att ändra grunden i samhället.'], knep: 'Ett val räcker inte. Riksdagen måste säga ja två gånger, med ett val emellan.' },
+    { h: 'Svåra ord i del 2', t: ['<b>Fundament:</b> grund, det som allt annat står på.', '<b>Förhandsgranska:</b> granska något innan det ges ut.', '<b>Censurera:</b> stoppa eller ändra något innan det ges ut.', '<b>Tron:</b> kungens eller drottningens plats som statschef.', '<b>Extremism:</b> åsikter som ligger väldigt långt ut åt ett håll och som kan hota demokratin.', '<b>Majoritet:</b> mer än hälften.', '<b>Förhastat beslut:</b> ett beslut som tas för snabbt.'] }
+  ],
+  rundor: [
+    { namn: 'De fyra grundlagarna', q: [
+      { t: 'multi', q: 'Vilka fyra är Sveriges grundlagar?', n: 4, a: ['Regeringsformen', 'Successionsordningen', 'Tryckfrihetsförordningen', 'Yttrandefrihetsgrundlagen', 'Skollagen', 'Brottsbalken'], why: 'R, S, T, Y: Regeringsformen, Successionsordningen, Tryckfrihetsförordningen och Yttrandefrihetsgrundlagen.' },
+      { t: 'match', q: 'Para ihop förkortningen med rätt grundlag.', par: [['RF', 'Regeringsformen'], ['SO', 'Successionsordningen'], ['TF', 'Tryckfrihetsförordningen'], ['YGL', 'Yttrandefrihetsgrundlagen']], why: 'RF, SO, TF och YGL. Förkortningarna används ofta i stället för de långa namnen.' },
+      { t: 'match', q: 'Vad handlar varje grundlag om?', par: [['Regeringsformen', 'Hur Sverige ska styras'], ['Successionsordningen', 'Vem som ärver tronen'], ['Tryckfrihetsförordningen', 'Böcker, tidningar och skrifter'], ['Yttrandefrihetsgrundlagen', 'Tv, radio, film och webbplatser']], why: 'RF = styret. SO = tronen. TF = tryckta skrifter. YGL = digitala medier, tv, radio och film.' },
+      { t: 'mc', q: 'Vilken grundlag är den viktigaste?', a: ['Regeringsformen', 'Successionsordningen', 'Tryckfrihetsförordningen', 'Yttrandefrihetsgrundlagen'], why: 'Regeringsformen beskriver hur Sverige ska styras.' },
+      { t: 'multi', q: 'Vad beskriver Regeringsformen?', n: 3, a: ['Hur val går till', 'Hur regeringen och riksdagen fungerar', 'Vilka demokratiska rättigheter medborgarna har', 'Vem som ärver tronen', 'Vilka partier som finns'], why: 'Regeringsformen beskriver hur Sverige ska styras, hur val går till, hur regering och riksdag fungerar och vilka demokratiska rättigheter medborgarna har.' },
+      { t: 'tf', q: 'Grundlagarna står över alla andra lagar.', c: true, why: 'Ingen annan lag får gå emot grundlagarna.' }
+    ] },
+    { namn: 'Tryckfrihet och yttrandefrihet', q: [
+      { t: 'mc', q: 'Vad skyddar Tryckfrihetsförordningen?', a: ['Rätten att trycka och sprida böcker utan censur', 'Rätten att rösta i de allmänna valen vart fjärde år', 'Rätten att ärva den svenska tronen och bli statschef', 'Rätten att gå i skolan och få vård utan att betala'], why: 'Alla har rätt att trycka och sprida böcker, tidningar och skrifter utan att staten förhandsgranskar eller censurerar dem.' },
+      { t: 'mc', q: 'Vad betyder offentlighetsprincipen?', a: ['Alla har rätt att läsa myndigheters dokument', 'Alla måste visa öppet vad de röstar på', 'Staten får granska tidningar före tryck', 'Riksdagens debatter måste hållas hemliga'], why: 'Offentlighetsprincipen ger alla rätt att läsa myndigheters dokument.' },
+      { t: 'mc', q: 'I vilken grundlag finns offentlighetsprincipen?', a: ['Tryckfrihetsförordningen', 'Regeringsformen', 'Successionsordningen', 'Yttrandefrihetsgrundlagen'], why: 'Offentlighetsprincipen står i Tryckfrihetsförordningen (TF).' },
+      { t: 'mc', q: 'Vilken grundlag gäller för digitala medier, tv, radio, film och webbplatser?', a: ['Yttrandefrihetsgrundlagen', 'Tryckfrihetsförordningen', 'Regeringsformen', 'Successionsordningen'], why: 'YGL fungerar som TF men gäller digitala medier, tv, radio, film och webbplatser.' },
+      { t: 'mc', q: 'Vad bestämmer Successionsordningen?', a: ['Vem som får ärva tronen och bli statschef', 'Vem som får bli statsminister efter ett val', 'Vilka som får rösta i riksdagsvalet', 'Vad tidningarna får skriva om kungen'], why: 'Successionsordningen bestämmer vem som får ärva den svenska tronen och bli kung eller drottning.' }
+    ] },
+    { namn: 'Skydda och ändra', q: [
+      { t: 'mc', q: 'Varför är grundlagarna extra viktiga för Sverige?', a: ['De skyddar demokratin och de mänskliga rättigheterna', 'De bestämmer hur hög skatten ska vara varje år', 'De gör att regeringen slipper lyssna på riksdagen', 'De ger kungen makt att stoppa nya lagar'], why: 'Grundlagarna är samhällets fundament. De skyddar vår demokrati och våra mänskliga rättigheter.' },
+      { t: 'mc', q: 'Grundlagarna fungerar som en broms. Vad bromsar de?', a: ['Att ett parti snabbt avskaffar demokratin', 'Att nya partier bildas inför ett val', 'Att folket röstar i de allmänna valen', 'Att medierna granskar landets politiker'], why: 'Ett parti som tillfälligt får majoritet kan inte snabbt avskaffa demokratin eller ta bort medborgarnas friheter.' },
+      { t: 'order', q: 'Hur ändras en grundlag? Tryck i rätt ordning.', steg: ['Riksdagen fattar ett första beslut', 'Det hålls ett allmänt riksdagsval', 'Riksdagen fattar ett likadant beslut igen'], why: 'Två likadana beslut med ett allmänt riksdagsval däremellan. Beslut, val, beslut.' },
+      { t: 'mc', q: 'Varför ska det vara ett val mellan de två besluten?', a: ['Folket får en chans att tycka till om ändringen', 'Politikerna behöver tid att vila mellan besluten', 'Kungen ska hinna läsa och godkänna förslaget', 'Det blir billigare att fatta två beslut än ett'], why: 'Folket får säga sitt i valet innan det andra, avgörande beslutet tas.' },
+      { t: 'mc', q: 'Varför ska det vara svårt att ändra grundlagarna?', a: ['För att skydda demokratin mot förhastade beslut', 'För att riksdagen ska slippa fatta så många beslut', 'För att inga lagar någonsin ska kunna ändras', 'För att regeringen ska kunna bestämma helt själv'], why: 'Politiska krafter, till exempel extremister, som vinner ett enda val ska inte kunna montera ner demokratins spelregler.' },
+      { t: 'mc', q: 'Vad ska krävas bland folket för att ändra grunden i samhället?', a: ['En långsiktig och stabil majoritet', 'En tillfällig majoritet i ett enda val', 'En liten grupp som vill ha förändring', 'Ett beslut av kungen och regeringen'], why: 'Det ska krävas en långsiktig och stabil majoritet bland folket. Det räcker inte att vinna ett enda val.' },
+      { t: 'tf', q: 'En grundlag kan ändras med ett enda beslut i riksdagen.', c: false, why: 'Det krävs två likadana beslut med ett riksdagsval emellan.' }
+    ] }
+  ],
+  forklara: [
+    { q: 'Vilka är Sveriges grundlagar och vad handlar varje grundlag om?', punkter: ['Sverige har fyra grundlagar som står över alla andra lagar.', 'Regeringsformen (RF): den viktigaste. Hur Sverige ska styras, hur val går till, hur regeringen och riksdagen fungerar och vilka demokratiska rättigheter medborgarna har.', 'Successionsordningen (SO): vem som får ärva tronen och bli statschef (kung eller drottning).', 'Tryckfrihetsförordningen (TF): rätt att trycka och sprida böcker, tidningar och skrifter utan att staten förhandsgranskar eller censurerar. Innehåller offentlighetsprincipen: alla har rätt att läsa myndigheters dokument.', 'Yttrandefrihetsgrundlagen (YGL): som TF men för digitala medier, tv, radio, film och webbplatser.'], a: 'Nämn alla fyra vid namn och ge ett exempel på vad de betyder i vardagen. Exempel: tack vare TF får en tidning skriva kritiskt om regeringen utan att staten granskar texten först.' },
+    { q: 'Varför är de (grundlagarna) extra viktiga för Sverige?', punkter: ['Grundlagarna är samhällets fundament.', 'De skyddar vår demokrati och våra mänskliga rättigheter.', 'De fungerar som en broms: ett parti som tillfälligt får majoritet i riksdagen kan inte snabbt avskaffa demokratin eller ta bort medborgarnas friheter.'], a: 'Resonera i flera steg: utan grundlagar skulle ett parti som vinner ett val kunna ta bort till exempel tryckfriheten direkt. Då kan ingen kritisera makten. Då är demokratin i fara.' },
+    { q: 'Hur går det till att ändra på grundlagarna?', punkter: ['Riksdagen måste fatta två likadana beslut.', 'Mellan besluten ska det vara ett allmänt riksdagsval.', 'Folket får alltså en chans att rösta och tycka till om ändringen innan det andra, avgörande beslutet tas.'], a: 'Förklara varför valet ligger emellan: väljarna kan rösta bort de politiker som vill ändra grundlagen. Då blir det inget andra beslut.' },
+    { q: 'Varför har man beslutat att det ska vara svårt att ändra på grundlagarna?', punkter: ['För att skydda demokratin mot förhastade beslut.', 'För att skydda mot politiska krafter, till exempel extremism, som vill montera ner de demokratiska spelreglerna efter att ha vunnit ett enskilt val.', 'Det ska krävas en långsiktig och stabil majoritet bland folket för att ändra grunden i samhället.'], a: 'Väg för och emot: det blir långsammare att ändra även bra saker. Men det priset är värt att betala för att demokratin inte ska kunna avskaffas snabbt.' }
+  ]
+},
+
+/* ───────────────────────── DEL 3 ───────────────────────── */
+{
+  id: 'd3',
+  titel: 'Ideologier och partier',
+  kort: [
+    { h: 'Liberalism', t: ['Uppkom under <b>1700-talet</b>.', 'Fokus på <b>individens frihet</b>, mänskliga rättigheter och fri handel utan statlig inblandning.'], knep: 'Liber betyder fri på latin.' },
+    { h: 'Konservatism', t: ['Uppkom kring <b>1800-talet</b>.', 'Vill <b>bevara</b> samhällets traditioner, värna familjen och förändra samhället långsamt och försiktigt.'], knep: 'Konservera = bevara, som en konservburk.' },
+    { h: 'Socialism', t: ['Uppkom under <b>1800-talets industrialisering</b>.', 'Vill <b>minska ekonomiska klyftor</b>.', 'Staten ska äga mycket och erbjuda en stark välfärd så att alla blir jämlika.'], knep: 'Social = tillsammans. Dela mer lika.' },
+    { h: 'Nationalism', t: ['Tog fart under <b>1800-talet</b>.', 'Betonar det egna landets <b>kultur, historia och språk</b>.', 'Vill skydda den nationella identiteten.'], knep: 'Nation = land. Det egna landet först.' },
+    { h: 'Feminism', t: ['Utvecklades starkt under <b>1800- och 1900-talet</b>.', 'Strävar efter fullständig <b>jämställdhet mellan män och kvinnor</b>: politiskt, ekonomiskt och socialt.'], knep: 'Femina betyder kvinna på latin.' },
+    { h: 'Ekologism', t: ['Uppkom under <b>1960- och 70-talet</b>. Yngst av de sex.', 'Sätter <b>miljön</b>, naturens kretslopp och jordens resurser i centrum, framför ekonomisk tillväxt.'], knep: 'Eko = miljö. Tänk ekologisk mat.' },
+    { h: 'Höger-vänsterskalan', t: ['En <b>ekonomisk</b> skala.', '<b>Vänstern</b> vill ha högre skatter, jämlikhet och att staten sköter skola och vård.', '<b>Högern</b> vill ha lägre skatter, mer privat ägande och mer individuell ekonomisk frihet.'], knep: 'Vänster = vi delar via staten. Höger = var och en bestämmer mer själv.' },
+    { h: 'Partiernas ideologier', t: ['<b>V och S:</b> rötter i socialismen.', '<b>MP:</b> grundar sig i ekologismen.', '<b>C och L:</b> liberala.', '<b>M och KD:</b> kombinerar konservatism och liberalism.', '<b>SD:</b> vilar på nationalism och konservatism.'], knep: 'Gå från vänster till höger: socialism, ekologism, liberalism, konservatism, nationalism.' },
+    partiKort('V'), partiKort('S'), partiKort('MP'), partiKort('C'),
+    partiKort('L'), partiKort('M'), partiKort('KD'), partiKort('SD'),
+    { h: 'Knep för symbolerna', t: ['<b>V</b> har röd nejlika. <b>S</b> har röd ros.', '<b>MP</b> har maskros. <b>C</b> har fyrklöver.', '<b>L</b> har blåklint. <b>M</b> har ett blått M.', '<b>KD</b> har vitsippa. <b>SD</b> har blåsippa.'], knep: 'Liberalerna = bLåkLint, två L. Två sippor: den vita hos KD, den blå hos SD.' },
+    { h: 'Svåra ord i del 3', t: ['<b>Ideologi:</b> en samling idéer om hur samhället borde vara.', '<b>Välfärd:</b> skola, vård och omsorg som vi betalar tillsammans.', '<b>Jämlikhet och jämställdhet:</b> jämlikhet gäller alla människor. Jämställdhet gäller mellan kvinnor och män.', '<b>Klyftor:</b> stora skillnader mellan människor, till exempel i pengar.', '<b>Tillväxt:</b> att ekonomin växer.', '<b>Värna:</b> skydda och ta hand om.', '<b>Integration:</b> att nya invånare blir en del av samhället.', '<b>Biologisk mångfald:</b> att det finns många olika arter av djur och växter.', '<b>Stram:</b> sträng, med hårda regler.', '<b>Språkrör:</b> Miljöpartiets ord för partiledare.'] }
+  ],
+  rundor: [
+    { namn: 'Liberalism, konservatism, socialism', q: [
+      { t: 'match', q: 'Para ihop liberalism, konservatism och socialism med rätt fokus.', par: [['Liberalism', 'Individens frihet'], ['Konservatism', 'Bevara traditioner'], ['Socialism', 'Minska ekonomiska klyftor']], why: 'Liberalism = frihet. Konservatism = bevara. Socialism = jämlikhet.' },
+      { t: 'multi', q: 'Vad står liberalismen för?', n: 3, a: ['Individens frihet', 'Mänskliga rättigheter', 'Fri handel utan statlig inblandning', 'Att staten ska äga mycket', 'Att förändra samhället långsamt'], why: 'Liberalismen betonar individens frihet, mänskliga rättigheter och fri handel utan statlig inblandning.' },
+      { t: 'mc', q: 'Vilken ideologi vill värna familjen och förändra samhället långsamt och försiktigt?', a: ['Konservatism', 'Socialism', 'Liberalism', 'Ekologism'], why: 'Konservatismen vill bevara samhällets traditioner, värna familjen och förändra långsamt.' },
+      { t: 'mc', q: 'Vilken ideologi vill att staten ska äga mycket och erbjuda en stark välfärd?', a: ['Socialism', 'Liberalism', 'Konservatism', 'Nationalism'], why: 'Socialismen vill minska de ekonomiska klyftorna så att alla blir jämlika.' }
+    ] },
+    { namn: 'Nationalism, feminism, ekologism', q: [
+      { t: 'match', q: 'Para ihop nationalism, feminism och ekologism med rätt fokus.', par: [['Nationalism', 'Det egna landets kultur och språk'], ['Feminism', 'Jämställdhet mellan män och kvinnor'], ['Ekologism', 'Miljön och jordens resurser']], why: 'Nationalism = nationen. Feminism = jämställdhet. Ekologism = miljön.' },
+      { t: 'mc', q: 'Vad betonar nationalismen?', a: ['Det egna landets kultur, historia och språk', 'Individens frihet och rätten till fri handel', 'Miljön, kretsloppet och jordens resurser', 'Jämställdhet mellan män och kvinnor'], why: 'Nationalismen betonar det egna landets kultur, historia och språk och vill skydda den nationella identiteten.' },
+      { t: 'mc', q: 'Feminismen vill ha jämställdhet mellan män och kvinnor. På vilka områden?', a: ['Politiskt, ekonomiskt och socialt', 'Politiskt, men inte ekonomiskt', 'Ekonomiskt, men inte socialt', 'Socialt, men inte politiskt'], why: 'Feminismen strävar efter fullständig jämställdhet: politiskt, ekonomiskt och socialt.' },
+      { t: 'mc', q: 'Vilken ideologi sätter miljön och naturens kretslopp framför ekonomisk tillväxt?', a: ['Ekologism', 'Liberalism', 'Nationalism', 'Feminism'], why: 'Ekologismen sätter miljön, naturens kretslopp och jordens resurser i centrum.' }
+    ] },
+    { namn: 'När kom ideologierna?', q: [
+      { t: 'mc', q: 'Vilken av de sex ideologierna är äldst?', a: ['Liberalism', 'Socialism', 'Ekologism', 'Feminism'], why: 'Liberalismen uppkom redan under 1700-talet.' },
+      { t: 'mc', q: 'Vilken ideologi är yngst?', a: ['Ekologism', 'Konservatism', 'Nationalism', 'Liberalism'], why: 'Ekologismen uppkom under 1960- och 70-talet.' },
+      { t: 'mc', q: 'Socialismen uppkom under 1800-talet. Vad hände då som hör ihop med den?', a: ['Industrialiseringen', 'Sverige gick med i EU', 'Internet uppfanns', 'Vikingatiden tog slut'], why: 'Socialismen uppkom under 1800-talets industrialisering.' },
+      { t: 'mc', q: 'När utvecklades feminismen starkt?', a: ['Under 1800- och 1900-talet', 'Under 1500- och 1600-talet', 'Under 1700-talet', 'Under 2010-talet'], why: 'Feminismen utvecklades starkt under 1800- och 1900-talet.' },
+      { t: 'order', q: 'Vilken kom först? Tryck i tidsordning, äldst först.', steg: ['Liberalism', 'Socialism', 'Ekologism'], why: 'Liberalism på 1700-talet, socialism under 1800-talets industrialisering, ekologism på 1960- och 70-talet.' },
+      { t: 'tf', q: 'Konservatismen och nationalismen växte båda fram kring 1800-talet.', c: true, why: 'Konservatismen uppkom kring 1800-talet och nationalismen tog fart under 1800-talet.' }
+    ] },
+    { namn: 'Höger eller vänster?', q: [
+      { t: 'mc', q: 'Vad handlar höger-vänsterskalan om?', a: ['Ekonomi: skatter och vem som ska äga och sköta saker', 'Ålder: hur länge partiet har funnits i riksdagen', 'Storlek: hur många röster partiet fick i valet', 'Geografi: var i landet partiet har flest väljare'], why: 'Höger-vänsterskalan är en ekonomisk skala.' },
+      { t: 'mc', q: 'Högre skatter och att staten sköter skola och vård. Vilken sida?', a: ['Vänster', 'Höger'], why: 'Vänstern vill ha högre skatter, jämlikhet och att staten sköter skola och vård.' },
+      { t: 'mc', q: 'Lägre skatter och mer privat ägande. Vilken sida?', a: ['Höger', 'Vänster'], why: 'Högern vill ha lägre skatter, mer privat ägande och mer individuell ekonomisk frihet.' },
+      { t: 'mc', q: 'Vad hör mest ihop med vänstern?', a: ['Jämlikhet', 'Privat ägande', 'Lägre skatter', 'Individuell ekonomisk frihet'], why: 'Vänstern betonar jämlikhet. De andra tre hör till högern.' },
+      { t: 'tf', q: 'Högern vill ha mer individuell ekonomisk frihet.', c: true, why: 'Högern vill ha lägre skatter, mer privat ägande och mer individuell ekonomisk frihet.' }
+    ] },
+    { namn: 'Partiernas ideologier', q: [
+      { t: 'mc', q: 'Vilka två partier har rötter i socialismen?', a: ['V och S', 'M och KD', 'C och L', 'SD och MP'], why: 'Vänsterpartiet och Socialdemokraterna har rötter i socialismen.' },
+      { t: 'mc', q: 'Vilken ideologi grundar sig Miljöpartiet i?', a: ['Ekologism', 'Nationalism', 'Konservatism', 'Socialism'], why: 'Miljöpartiet grundar sig i ekologismen.' },
+      { t: 'mc', q: 'Centerpartiet och Liberalerna bygger på samma ideologi. Vilken?', a: ['Liberalism', 'Socialism', 'Nationalism', 'Ekologism'], why: 'C och L är liberala partier.' },
+      { t: 'mc', q: 'Moderaterna och Kristdemokraterna kombinerar två ideologier. Vilka?', a: ['Konservatism och liberalism', 'Socialism och feminism', 'Nationalism och ekologism', 'Socialism och liberalism'], why: 'M och KD kombinerar konservatism och liberalism.' },
+      { t: 'mc', q: 'Vilka ideologier vilar Sverigedemokraterna på?', a: ['Nationalism och konservatism', 'Liberalism och ekologism', 'Socialism och feminism', 'Liberalism och socialism'], why: 'SD vilar på nationalism och konservatism.' }
+    ] },
+    { namn: 'Partiledarna', q: [
+      { t: 'match', q: 'Vem leder V, S, MP och C?', par: [['Vänsterpartiet', 'Nooshi Dadgostar'], ['Socialdemokraterna', 'Magdalena Andersson'], ['Miljöpartiet', 'Amanda Lind och Daniel Helldén'], ['Centerpartiet', 'Elisabeth Thand Ringqvist']], why: 'V: Nooshi Dadgostar. S: Magdalena Andersson. MP: Amanda Lind och Daniel Helldén. C: Elisabeth Thand Ringqvist.' },
+      { t: 'match', q: 'Vem leder L, M, KD och SD?', par: [['Liberalerna', 'Simona Mohamsson'], ['Moderaterna', 'Ulf Kristersson'], ['Kristdemokraterna', 'Ebba Busch'], ['Sverigedemokraterna', 'Jimmie Åkesson']], why: 'L: Simona Mohamsson. M: Ulf Kristersson. KD: Ebba Busch. SD: Jimmie Åkesson.' },
+      { t: 'mc', q: 'Vem är partiledare för Centerpartiet?', a: ['Elisabeth Thand Ringqvist', 'Muharrem Demirok', 'Simona Mohamsson', 'Amanda Lind och Daniel Helldén'], why: 'Elisabeth Thand Ringqvist är partiledare sedan november 2025. På instuderingsbladet står Muharrem Demirok, men han har slutat som partiledare.' },
+      { t: 'mc', q: 'Vem är partiledare för Liberalerna?', a: ['Simona Mohamsson', 'Johan Pehrson', 'Elisabeth Thand Ringqvist', 'Magdalena Andersson'], why: 'Simona Mohamsson är partiledare sedan juni 2025. På instuderingsbladet står Johan Pehrson, men han har slutat som partiledare.' },
+      { t: 'mc', q: 'Vilket parti har två språkrör i stället för en partiledare?', a: ['Miljöpartiet', 'Vänsterpartiet', 'Centerpartiet', 'Liberalerna'], why: 'Miljöpartiet leds av två språkrör: Amanda Lind och Daniel Helldén.' }
+    ] },
+    { namn: 'Partiernas symboler', q: [
+      { t: 'match', q: 'Vilken symbol har V, S, MP och C?', par: [['Vänsterpartiet', 'Röd nejlika'], ['Socialdemokraterna', 'Röd ros'], ['Miljöpartiet', 'Maskros'], ['Centerpartiet', 'Fyrklöver']], why: 'V: röd nejlika. S: röd ros. MP: maskros. C: fyrklöver.' },
+      { t: 'match', q: 'Vilken symbol har L, M, KD och SD?', par: [['Liberalerna', 'Blåklint'], ['Moderaterna', 'Blått M'], ['Kristdemokraterna', 'Vitsippa'], ['Sverigedemokraterna', 'Blåsippa']], why: 'L: blåklint. M: blått M. KD: vitsippa. SD: blåsippa.' },
+      { t: 'mc', q: 'Vilket parti har vitsippan som symbol?', a: ['Kristdemokraterna', 'Sverigedemokraterna', 'Liberalerna', 'Miljöpartiet'], why: 'Vit sippa hos KD. Blå sippa hos SD.' },
+      { t: 'mc', q: 'Vilket parti har blåsippan som symbol?', a: ['Sverigedemokraterna', 'Kristdemokraterna', 'Liberalerna', 'Moderaterna'], why: 'Blå sippa hos SD. Liberalerna har blåklint.' },
+      { t: 'mc', q: 'Vilket parti har en röd ros som symbol?', a: ['Socialdemokraterna', 'Vänsterpartiet', 'Centerpartiet', 'Kristdemokraterna'], why: 'Rosen hör till Socialdemokraterna. Vänsterpartiet har en röd nejlika.' }
+    ] },
+    { namn: 'Partierna på skalan', q: [
+      { t: 'mc', q: 'Vilket parti står längst till vänster på skalan?', a: ['Vänsterpartiet', 'Socialdemokraterna', 'Miljöpartiet', 'Centerpartiet'], why: 'Vänsterpartiet placeras till vänster.' },
+      { t: 'mc', q: 'Var på skalan placeras Socialdemokraterna?', a: ['Vänster/mitten', 'Mitten/höger', 'Höger', 'Grön/mitten'], why: 'Socialdemokraterna placeras vänster/mitten.' },
+      { t: 'mc', q: 'Var på skalan placeras Miljöpartiet?', a: ['Grön/mitten', 'Höger', 'Vänster', 'Mitten/höger'], why: 'Miljöpartiet placeras grön/mitten.' },
+      { t: 'mc', q: 'Var på skalan placeras Centerpartiet och Liberalerna?', a: ['Mitten/höger', 'Vänster', 'Vänster/mitten', 'Grön/mitten'], why: 'C och L placeras mitten/höger.' },
+      { t: 'mc', q: 'Vilka tre partier placeras till höger?', a: ['M, KD och SD', 'V, S och MP', 'C, L och MP', 'S, C och L'], why: 'Moderaterna, Kristdemokraterna och Sverigedemokraterna placeras till höger.' }
+    ] },
+    { namn: 'Viktigaste frågor: V, S, MP och C', q: [
+      { t: 'match', q: 'Vilken fråga är viktig för V, S, MP och C?', par: [['V', 'Ekonomisk jämlikhet'], ['S', 'Stärka sjukvården och skolan'], ['MP', 'Klimatåtgärder och förnybar energi'], ['C', 'Landsbygd och företagande']], why: 'V: jämlikhet. S: sjukvård och skola. MP: klimat. C: landsbygd och företagande.' },
+      { t: 'mc', q: 'Vilket parti vill stoppa vinster i välfärden?', a: ['Vänsterpartiet', 'Moderaterna', 'Centerpartiet', 'Liberalerna'], why: 'Vänsterpartiets viktigaste frågor: ekonomisk jämlikhet, stoppa vinster i välfärden och rättigheter.' },
+      { t: 'mc', q: 'Vilket parti vill stärka sjukvården och skolan och bekämpa brottslighetens orsaker?', a: ['Socialdemokraterna', 'Miljöpartiet', 'Centerpartiet', 'Sverigedemokraterna'], why: 'Socialdemokraterna vill stärka sjukvården och skolan och bekämpa brottslighetens orsaker.' },
+      { t: 'mc', q: 'För vilket parti är biologisk mångfald en av de viktigaste frågorna?', a: ['Miljöpartiet', 'Kristdemokraterna', 'Sverigedemokraterna', 'Moderaterna'], why: 'Miljöpartiet: klimatåtgärder, förnybar energi och biologisk mångfald.' },
+      { t: 'mc', q: 'Vilket parti står för grön liberalism?', a: ['Centerpartiet', 'Vänsterpartiet', 'Socialdemokraterna', 'Sverigedemokraterna'], why: 'Centerpartiet: landsbygd, företagande och grön liberalism.' }
+    ] },
+    { namn: 'Viktigaste frågor: L, M, KD och SD', q: [
+      { t: 'match', q: 'Vilken fråga är viktig för L, M, KD och SD?', par: [['L', 'Skolan: ordning och betyg'], ['M', 'Sänkta skatter'], ['KD', 'Familjestöd och äldreomsorg'], ['SD', 'Stram invandringspolitik']], why: 'L: skolan. M: sänkta skatter. KD: familj och äldreomsorg. SD: stram invandringspolitik.' },
+      { t: 'mc', q: 'Vilket parti har integration och individens frihet bland sina viktigaste frågor?', a: ['Liberalerna', 'Kristdemokraterna', 'Vänsterpartiet', 'Miljöpartiet'], why: 'Liberalerna: skolpolitik (ordning och betyg), integration och individens frihet.' },
+      { t: 'mc', q: 'Vilket parti vill ha hårdare tag mot brott och satsar på kärnkraft och energi?', a: ['Moderaterna', 'Miljöpartiet', 'Vänsterpartiet', 'Centerpartiet'], why: 'Moderaterna: sänkta skatter, hårdare tag mot brott, kärnkraft och energi.' },
+      { t: 'mc', q: 'Sjukvård med statligt ansvar, familjestöd och äldreomsorg. Vilket parti?', a: ['Kristdemokraterna', 'Centerpartiet', 'Miljöpartiet', 'Sverigedemokraterna'], why: 'Kristdemokraterna: sjukvård (statligt ansvar), familjestöd och äldreomsorg.' },
+      { t: 'mc', q: 'Vilket parti har hårdare straff och svensk kultur och trygghet bland sina viktigaste frågor?', a: ['Sverigedemokraterna', 'Socialdemokraterna', 'Miljöpartiet', 'Centerpartiet'], why: 'Sverigedemokraterna: stram invandringspolitik, hårdare straff, svensk kultur och trygghet.' }
+    ] }
+  ],
+  forklara: [
+    { q: 'Vilka 6 ideologier har vi tagit upp och vad handlar de kortfattat om?', punkter: ['Liberalism (1700-talet): individens frihet, mänskliga rättigheter, fri handel utan statlig inblandning.', 'Konservatism (kring 1800-talet): bevara traditioner, värna familjen, förändra samhället långsamt och försiktigt.', 'Socialism (1800-talets industrialisering): minska ekonomiska klyftor. Staten ska äga mycket och ge stark välfärd så att alla blir jämlika.', 'Nationalism (tog fart under 1800-talet): det egna landets kultur, historia och språk. Skydda den nationella identiteten.', 'Feminism (1800- och 1900-talet): fullständig jämställdhet mellan män och kvinnor, politiskt, ekonomiskt och socialt.', 'Ekologism (1960- och 70-talet): miljön, naturens kretslopp och jordens resurser i centrum framför ekonomisk tillväxt.'], a: 'Jämför två ideologier med varandra. Exempel: liberalismen vill ha så lite statlig inblandning som möjligt, medan socialismen vill att staten ska äga mycket. De ser alltså olika på statens roll.' },
+    { q: 'Vad är höger-vänsterskalan och vilka ideologier står bakom partierna idag?', punkter: ['Höger-vänsterskalan är en ekonomisk skala.', 'Vänstern vill ha högre skatter, jämlikhet och att staten sköter skola och vård.', 'Högern vill ha lägre skatter, mer privat ägande och mer individuell ekonomisk frihet.', 'V och S har rötter i socialismen. MP grundar sig i ekologismen.', 'C och L är liberala. M och KD kombinerar konservatism och liberalism.', 'SD vilar på nationalism och konservatism.'], a: 'Koppla ideologi till plats på skalan. Exempel: socialismen vill ha jämlikhet och stark välfärd. Därför står V till vänster och S vänster/mitten, där man vill ha högre skatter och att staten sköter skola och vård.' },
+    { q: 'Vilka är de åtta riksdagspartierna, deras ledare, symboler, placering och viktigaste frågor?', punkter: ['V: Nooshi Dadgostar, röd nejlika, vänster. Ekonomisk jämlikhet, stoppa vinster i välfärden, rättigheter.', 'S: Magdalena Andersson, röd ros, vänster/mitten. Stärka sjukvården och skolan, bekämpa brottslighetens orsaker.', 'MP: Amanda Lind och Daniel Helldén, maskros, grön/mitten. Klimatåtgärder, förnybar energi, biologisk mångfald.', 'C: Elisabeth Thand Ringqvist, fyrklöver, mitten/höger. Landsbygd, företagande, grön liberalism.', 'L: Simona Mohamsson, blåklint, mitten/höger. Skolpolitik (ordning och betyg), integration, individens frihet.', 'M: Ulf Kristersson, blått M, höger. Sänkta skatter, hårdare tag mot brott, kärnkraft och energi.', 'KD: Ebba Busch, vitsippa, höger. Sjukvård (statligt ansvar), familjestöd, äldreomsorg.', 'SD: Jimmie Åkesson, blåsippa, höger. Stram invandringspolitik, hårdare straff, svensk kultur och trygghet.'], a: 'Förklara varför en fråga passar ett parti. Exempel: Moderaterna står till höger, och högern vill ha lägre skatter. Därför är sänkta skatter en av deras viktigaste frågor.' }
+  ]
+},
+
+/* ───────────────────────── DEL 4 ───────────────────────── */
+{
+  id: 'd4',
+  titel: 'Valet och de politiska nivåerna',
+  kort: [
+    { h: 'När är det val?', t: ['Ordinarie val hålls <b>vart fjärde år</b>, den <b>andra söndagen i september</b>.', 'Vi röstar i <b>tre val samtidigt</b>: till riksdagen, regionen och kommunen.', 'Val till EU-parlamentet hålls <b>vart femte år</b>.'], knep: 'Fyra år mellan valen här hemma. Fem år för EU.' },
+    { h: 'Vem får rösta?', t: ['<b>Riksdagen:</b> du måste vara svensk medborgare och fylla 18 år senast på valdagen.', '<b>Kommun och region:</b> även utländska medborgare kan rösta, om de har varit folkbokförda i Sverige i tre år.'], knep: 'Riksdagen = svensk medborgare. Kommun och region = räcker att ha bott här i tre år.' },
+    { h: 'Allmänna, fria och hemliga val', t: ['<b>Allmänna:</b> alla vuxna har rösträtt. En röst per person, oavsett inkomst eller kön.', '<b>Fria:</b> ingen får tvinga eller hota dig att rösta på ett visst sätt. Partier får bildas fritt.', '<b>Hemliga:</b> du röstar helt anonymt bakom en skärm. Ingen har rätt att få veta vad du röstat på.'], knep: 'Allmänna = alla. Fria = inget tvång. Hemliga = ingen får veta.' },
+    { h: 'Så går det till att rösta', t: ['1. Du tar dina valsedlar. <b>Gul = riksdag. Blå = region. Vit = kommun.</b>', '2. Du går bakom en valskärm.', '3. Du lägger valsedlarna i kuvert.', '4. Du lämnar kuverten till röstmottagarna. De prickar av röstkortet.'], knep: 'Gul som de tre kronorna = riksdagen. Blå som blåljuset på ambulansen = regionen. Vit som tavlan i klassrummet = kommunen.' },
+    { h: 'Kommunen (290 stycken)', t: ['<b>Uppgifter:</b> skola (grundskola och gymnasium), äldreomsorg, socialtjänst, bibliotek, rent vatten och räddningstjänst.', '<b>Bestämmer:</b> kommunfullmäktige, kommunens parlament.', '<b>Pengar:</b> kommunalskatt (dras på lönen) och statliga bidrag.'], knep: 'Kommunen = nära dig. Skolan, biblioteket och vattnet i kranen.' },
+    { h: 'Regionen (21 stycken)', t: ['<b>Uppgifter:</b> sjukvård, sjukhus, tandvård och regional kollektivtrafik (bussar och tåg).', '<b>Bestämmer:</b> regionfullmäktige.', '<b>Pengar:</b> regionskatt och patientavgifter.'], knep: 'Regionen = sjukhuset och bussen.' },
+    { h: 'Staten (1, hela landet)', t: ['<b>Uppgifter:</b> lagar, försvar, utrikespolitik, polis, universitet och den övergripande statsbudgeten.', '<b>Bestämmer:</b> riksdagen.', '<b>Pengar:</b> statliga skatter, till exempel moms.'], knep: 'Staten = det som måste vara lika i hela landet. Lagar, polis och försvar.' },
+    { h: 'EU', t: ['Sverige är medlem i EU (Europeiska unionen) sedan <b>1995</b>.', 'EU är en europeisk politisk organisation.', 'EU fattar <b>överstatliga beslut</b>. De gäller i alla medlemsländer.'], knep: 'Överstatlig = över staten. Beslutet gäller i alla EU-länder.' },
+    { h: 'Svåra ord i del 4', t: ['<b>Folkbokförd:</b> registrerad som boende på en adress i Sverige.', '<b>Röstkort:</b> kortet du får hem före valet. Det visar att du får rösta.', '<b>Röstmottagare:</b> personen som tar emot din röst i vallokalen.', '<b>Socialtjänst:</b> kommunens stöd till människor som behöver hjälp.', '<b>Patientavgift:</b> det man betalar när man besöker vården.', '<b>Moms:</b> en skatt på det vi köper.', '<b>Utrikespolitik:</b> hur Sverige samarbetar med andra länder.', '<b>Kollektivtrafik:</b> bussar och tåg som alla får åka med.', '<b>Beslutande organ:</b> gruppen som fattar besluten.'] }
+  ],
+  rundor: [
+    { namn: 'Valdagen', q: [
+      { t: 'mc', q: 'Hur ofta är det val till riksdag, region och kommun?', a: ['Vart fjärde år', 'Vart femte år', 'Vartannat år', 'Vart tredje år'], why: 'Ordinarie val hålls vart fjärde år.' },
+      { t: 'mc', q: 'Vilken dag hålls valet?', a: ['Andra söndagen i september', 'Första söndagen i september', 'Sista söndagen i augusti', 'Första måndagen i oktober'], why: 'Valdagen är alltid den andra söndagen i september.' },
+      { t: 'multi', q: 'Vilka tre val röstar vi i samtidigt?', n: 3, a: ['Riksdagen', 'Regionen', 'Kommunen', 'EU-parlamentet', 'Regeringen'], why: 'Riksdag, region och kommun. EU-valet är ett eget val. Folket röstar inte direkt om regeringen.' },
+      { t: 'mc', q: 'Hur ofta är det val till EU-parlamentet?', a: ['Vart femte år', 'Vart fjärde år', 'Varje år', 'Vart tionde år'], why: 'Val till EU-parlamentet hålls vart femte år.' },
+      { t: 'mc', q: 'Vad krävs för att få rösta till riksdagen?', a: ['Svensk medborgare och 18 år senast på valdagen', 'Bo i Sverige och ha fyllt 16 år på valdagen', 'Svensk medborgare och 21 år senast på valdagen', 'Ha varit folkbokförd i Sverige i minst tre år'], why: 'Du måste vara svensk medborgare och fylla 18 år senast på valdagen.' },
+      { t: 'mc', q: 'Utländska medborgare kan rösta i kommun- och regionval. Hur länge måste de ha varit folkbokförda i Sverige?', a: ['Tre år', 'Ett år', 'Fem år', 'Tio år'], why: 'De ska ha varit folkbokförda i Sverige i tre år. Till riksdagen får bara svenska medborgare rösta.' }
+    ] },
+    { namn: 'Allmänna, fria och hemliga', q: [
+      { t: 'match', q: 'Para ihop principen med vad den betyder.', par: [['Allmänna val', 'Alla vuxna har rösträtt, en röst per person'], ['Fria val', 'Ingen får tvinga eller hota dig'], ['Hemliga val', 'Du röstar anonymt bakom en skärm']], why: 'Allmänna = alla. Fria = inget tvång. Hemliga = ingen får veta.' },
+      { t: 'mc', q: 'Partier får bildas fritt. Vilken princip hör det till?', a: ['Fria val', 'Allmänna val', 'Hemliga val'], why: 'I fria val får ingen tvingas, och partier får bildas fritt.' },
+      { t: 'mc', q: 'En röst per person, oavsett inkomst eller kön. Vilken princip?', a: ['Allmänna val', 'Fria val', 'Hemliga val'], why: 'Allmänna val betyder att alla vuxna har rösträtt och en röst var.' },
+      { t: 'mc', q: 'Någon kräver att få veta vad du röstade på. Vilken princip skyddar dig?', a: ['Hemliga val', 'Allmänna val', 'Fria val'], why: 'Du röstar anonymt. Ingen har rätt att få veta vad du röstat på.' },
+      { t: 'tf', q: 'Den som tjänar mycket pengar har fler röster än andra.', c: false, why: 'Alla har en röst var, oavsett inkomst eller kön. Det är vad allmänna val betyder.' }
+    ] },
+    { namn: 'Så röstar du', q: [
+      { t: 'match', q: 'Vilken färg har valsedeln?', par: [['Gul', 'Riksdagen'], ['Blå', 'Regionen'], ['Vit', 'Kommunen']], why: 'Gul = riksdag. Blå = region. Vit = kommun.' },
+      { t: 'order', q: 'Hur går det till att rösta? Tryck i rätt ordning.', steg: ['Ta dina valsedlar', 'Gå bakom valskärmen', 'Lägg valsedlarna i kuvert', 'Lämna kuverten till röstmottagarna'], why: 'Valsedlar, valskärm, kuvert, röstmottagare.' },
+      { t: 'mc', q: 'Vad gör röstmottagarna när du lämnar dina kuvert?', a: ['Prickar av röstkortet', 'Öppnar kuverten och läser', 'Frågar vad du röstade på', 'Skriver upp ditt parti'], why: 'Röstmottagarna prickar av röstkortet. De får aldrig veta vad du röstade på.' },
+      { t: 'mc', q: 'Varför går man bakom en valskärm?', a: ['För att valet ska vara hemligt', 'För att det ska gå fortare', 'För att få hjälp att välja parti', 'För att slippa stå i kö'], why: 'Bakom skärmen röstar du anonymt. Så skyddas det hemliga valet.' },
+      { t: 'mc', q: 'Vilken färg har valsedeln till riksdagsvalet?', a: ['Gul', 'Blå', 'Vit'], why: 'Gul = riksdag. Blå = region. Vit = kommun.' }
+    ] },
+    { namn: 'Tre nivåer', q: [
+      { t: 'match', q: 'Hur många finns det?', par: [['Kommuner', '290'], ['Regioner', '21'], ['Stat', '1']], why: '290 kommuner, 21 regioner och 1 stat.' },
+      { t: 'mc', q: 'Vem ansvarar för grundskola och gymnasium?', a: ['Kommunen', 'Regionen', 'Staten'], why: 'Kommunen sköter skola, äldreomsorg, socialtjänst, bibliotek, rent vatten och räddningstjänst.' },
+      { t: 'mc', q: 'Vem ansvarar för sjukvård, sjukhus och tandvård?', a: ['Regionen', 'Kommunen', 'Staten'], why: 'Regionen sköter sjukvård, sjukhus, tandvård och regional kollektivtrafik.' },
+      { t: 'mc', q: 'Vem ansvarar för lagar, försvar, polis och utrikespolitik?', a: ['Staten', 'Kommunen', 'Regionen'], why: 'Staten sköter lagar, försvar, utrikespolitik, polis, universitet och statsbudgeten.' },
+      { t: 'mc', q: 'Vilket organ fattar besluten för staten, alltså hela landet?', a: ['Riksdagen', 'Regionfullmäktige', 'Kommunfullmäktige', 'Skatteverket'], why: 'Riksdagen beslutar för hela landet. Kommunfullmäktige beslutar i kommunen och regionfullmäktige i regionen.' }
+    ] },
+    { namn: 'Vem gör vad?', q: [
+      { t: 'mc', q: 'Vem ansvarar för äldreomsorg, socialtjänst och räddningstjänst?', a: ['Kommunen', 'Regionen', 'Staten'], why: 'Det är kommunens uppgifter.' },
+      { t: 'mc', q: 'Vem ansvarar för bibliotek och rent vatten?', a: ['Kommunen', 'Regionen', 'Staten'], why: 'Det är kommunens uppgifter.' },
+      { t: 'mc', q: 'Vem ansvarar för regional kollektivtrafik, alltså bussar och tåg?', a: ['Regionen', 'Kommunen', 'Staten'], why: 'Regionen sköter den regionala kollektivtrafiken.' },
+      { t: 'mc', q: 'Vem ansvarar för universiteten och den övergripande statsbudgeten?', a: ['Staten', 'Kommunen', 'Regionen'], why: 'Staten sköter lagar, försvar, utrikespolitik, polis, universitet och statsbudgeten.' },
+      { t: 'mc', q: 'Vad är kommunfullmäktige och regionfullmäktige?', a: ['De som fattar besluten i kommun och region', 'Två av de femton utskotten i riksdagen', 'Myndigheter som lyder under regeringen', 'Departement där ministrarna arbetar'], why: 'Kommunfullmäktige är kommunens parlament. Regionfullmäktige är det beslutande organet i regionen.' }
+    ] },
+    { namn: 'Pengarna och EU', q: [
+      { t: 'match', q: 'Var kommer pengarna ifrån?', par: [['Kommunen', 'Egen skatt och statliga bidrag'], ['Regionen', 'Egen skatt och patientavgifter'], ['Staten', 'Skatter som moms']], why: 'Kommunen: kommunalskatt och statliga bidrag. Regionen: regionskatt och patientavgifter. Staten: statliga skatter, till exempel moms.' },
+      { t: 'mc', q: 'Vem får pengar från patientavgifter?', a: ['Regionen', 'Kommunen', 'Staten'], why: 'Regionen får sina pengar från regionskatt och patientavgifter.' },
+      { t: 'mc', q: 'Hur betalas kommunalskatten?', a: ['Den dras på lönen', 'Den betalas i affären', 'Den betalas på sjukhuset', 'Den betalas av företag'], why: 'Kommunalskatten dras på lönen.' },
+      { t: 'mc', q: 'Vad är EU?', a: ['En europeisk politisk organisation', 'En svensk statlig myndighet', 'Ett av riksdagens femton utskott', 'En av Sveriges fyra grundlagar'], why: 'EU, Europeiska unionen, är en europeisk politisk organisation. Sverige är medlem.' },
+      { t: 'mc', q: 'Vilket år gick Sverige med i EU?', a: ['1995', '1975', '2005', '1985'], why: 'Sverige är medlem i EU, Europeiska unionen, sedan 1995.' },
+      { t: 'mc', q: 'EU fattar överstatliga beslut. Vad betyder det?', a: ['Besluten gäller i alla medlemsländer', 'Besluten gäller bara i Sverige', 'Besluten är bara tips till länderna', 'Besluten gäller bara utanför EU'], why: 'Överstatliga beslut gäller i alla medlemsländer.' }
+    ] }
+  ],
+  forklara: [
+    { q: 'Hur ofta har vi val, vem får rösta, i vilka val, och vad kännetecknar allmänna, fria och hemliga val?', punkter: ['Ordinarie val vart fjärde år, andra söndagen i september.', 'Tre val samtidigt: riksdagen, regionen och kommunen. EU-parlamentet väljs vart femte år.', 'Riksdagen: svensk medborgare och 18 år senast på valdagen.', 'Kommun och region: även utländska medborgare som varit folkbokförda i Sverige i tre år.', 'Allmänna: alla vuxna har rösträtt, en röst per person oavsett inkomst eller kön.', 'Fria: ingen får tvinga eller hota dig. Partier får bildas fritt.', 'Hemliga: du röstar anonymt bakom en skärm. Ingen har rätt att få veta vad du röstat på.', 'Så röstar man: valsedlar (gul = riksdag, blå = region, vit = kommun), valskärm, kuvert, röstmottagarna prickar av röstkortet.'], a: 'Förklara varför principerna behövs. Exempel: om valen inte var hemliga skulle någon kunna hota dig att rösta på ett visst parti och sedan kontrollera det. Då är valet inte längre fritt.' },
+    { q: 'Vilka är Sveriges 3 politiska nivåer, hur många finns det, vad gör de och hur finansieras de?', punkter: ['Kommun, 290 stycken: skola (grundskola och gymnasium), äldreomsorg, socialtjänst, bibliotek, rent vatten och räddningstjänst.', 'Kommunen styrs av kommunfullmäktige (kommunens parlament) och får pengar från kommunalskatt (dras på lönen) och statliga bidrag.', 'Region, 21 stycken: sjukvård, sjukhus, tandvård och regional kollektivtrafik (bussar och tåg).', 'Regionen styrs av regionfullmäktige och får pengar från regionskatt och patientavgifter.', 'Staten, 1 för hela landet: lagar, försvar, utrikespolitik, polis, universitet och övergripande statsbudget.', 'Staten styrs av riksdagen och får pengar från statliga skatter, till exempel moms.', 'Sverige är också med i EU sedan 1995. EU fattar överstatliga beslut som gäller i alla medlemsländer.'], a: 'Resonera om varför uppgifterna är uppdelade. Exempel: skolan ligger hos kommunen eftersom den ligger nära dem som bor där. Försvaret måste vara gemensamt för hela landet och ligger därför hos staten.' }
+  ]
+},
+
+/* ───────────────────────── DEL 5 ───────────────────────── */
+{
+  id: 'd5',
+  titel: 'Riksdagen',
+  kort: [
+    { h: 'Proportionellt valsystem', t: ['Riksdagen <b>speglar valresultatet exakt</b>.', 'Får ett parti 15 % av rösterna får det också 15 % av platserna (mandaten) i riksdagen.'], knep: 'Proportionellt = lika stor del av platserna som av rösterna.' },
+    { h: 'Två tal och ett ord', t: ['<b>349</b> mandat (platser) finns i riksdagen. Antalet är udda för att undvika oavgjorda omröstningar.', '<b>175</b> mandat krävs för majoritet.', 'En person med en plats i riksdagen kallas <b>riksdagsledamot</b>.'], knep: '349 delat på två är 174,5. Därför är 175 mer än hälften.' },
+    { h: 'Proposition och motion', t: ['<b>Proposition:</b> ett lagförslag från <b>regeringen</b>.', '<b>Motion:</b> ett lagförslag från en enskild <b>riksdagsledamot</b> eller en grupp i riksdagen.'], knep: 'MOTion kommer från en ledaMOT. Då är propositionen regeringens.' },
+    { h: 'Från förslag till beslut', t: ['1. Ett förslag kommer in.', '2. Det skickas till ett av riksdagens <b>15 utskott</b>. Till exempel Utbildningsutskottet eller Trafikutskottet.', '3. Utskottet är en expertgrupp av politiker. De fördjupar sig i frågan och skriver ett <b>betänkande</b>: ett råd om vad riksdagen borde rösta.', '4. Alla ledamöter samlas i <b>kammaren</b>. Den kallas också plenisalen eller plenarsalen. Där debatterar de och fattar det slutgiltiga beslutet genom omröstning.'], knep: 'Utskottet tänker efter och skriver ett betänkande. Kammaren bestämmer.' },
+    { h: 'Talmannen', t: ['Talmannen leder riksdagens arbete.', 'Leder debatterna i kammaren.', 'Ser till att riksdagens regler följs.', '<b>Viktigaste uppgiften:</b> leda förhandlingarna efter ett val och föreslå en ny statsminister som riksdagen ska rösta om.'], knep: 'Talmannen fördelar ordet när ledamöterna ska tala.' },
+    { h: 'Svåra ord i del 5', t: ['<b>Mandat:</b> en plats i riksdagen.', '<b>Ledamot:</b> en medlem, här en person som sitter i riksdagen.', '<b>Majoritet:</b> mer än hälften.', '<b>Proportionellt:</b> i samma förhållande. Lika stor del av platserna som av rösterna.', '<b>Förhandlingar:</b> samtal där man försöker komma överens.'] }
+  ],
+  rundor: [
+    { namn: 'Siffrorna i riksdagen', q: [
+      { t: 'mc', q: 'Hur många mandat (platser) finns i riksdagen?', a: ['349', '350', '175', '290'], why: 'Riksdagen har 349 mandat.' },
+      { t: 'mc', q: 'Varför är antalet mandat udda?', a: ['För att undvika oavgjorda omröstningar', 'För att det är en gammal tradition', 'För att talmannen inte räknas med', 'För att det finns 349 kommuner'], why: 'Med ett udda antal platser kan det inte bli lika på båda sidor när alla röstar.' },
+      { t: 'mc', q: 'Hur många mandat krävs för majoritet?', a: ['175', '174', '200', '349'], why: 'Minst 175 mandat, alltså mer än hälften av 349.' },
+      { t: 'mc', q: 'Vad kallas en person som har en plats i riksdagen?', a: ['Riksdagsledamot', 'Statsråd', 'Talman', 'Röstmottagare'], why: 'En person med ett mandat kallas riksdagsledamot.' },
+      { t: 'mc', q: 'Ett parti får 15 % av rösterna i valet. Hur stor del av mandaten får partiet?', a: ['15 %', '30 %', '10 %', '50 %'], why: 'Sverige har ett proportionellt valsystem. Riksdagen speglar valresultatet.' },
+      { t: 'mc', q: 'Vad kallas Sveriges valsystem?', a: ['Proportionellt', 'Parlamentariskt', 'Konstitutionellt', 'Överstatligt'], why: 'I ett proportionellt valsystem får partierna lika stor del av mandaten som av rösterna.' }
+    ] },
+    { namn: 'Förslag och utskott', q: [
+      { t: 'mc', q: 'Vad är en proposition?', a: ['Ett lagförslag från regeringen', 'Ett lagförslag från en riksdagsledamot', 'Ett beslut som en domstol har fattat', 'Ett råd som ett utskott har skrivit'], why: 'En proposition är ett lagförslag som kommer från regeringen.' },
+      { t: 'mc', q: 'Vad är en motion?', a: ['Ett lagförslag från en ledamot eller en grupp i riksdagen', 'Ett lagförslag som regeringen lämnar över till riksdagen', 'En omröstning där alla ledamöter i kammaren deltar', 'Ett råd från ett utskott om hur riksdagen bör rösta'], why: 'En motion är ett lagförslag från en riksdagsledamot eller en grupp i riksdagen. Knep: MOTion kommer från en ledaMOT.' },
+      { t: 'mc', q: 'Hur många utskott har riksdagen?', a: ['15', '8', '21', '4'], why: 'Riksdagen har 15 utskott, till exempel Utbildningsutskottet och Trafikutskottet.' },
+      { t: 'mc', q: 'Vad är ett utskott?', a: ['En expertgrupp av politiker som fördjupar sig i en fråga', 'En domstol som dömer politiker som har brutit mot lagen', 'En myndighet som arbetar under ett departement', 'En grupp väljare som samlas i sin kommun'], why: 'Utskottet fördjupar sig i frågan innan riksdagen röstar.' },
+      { t: 'mc', q: 'Vad är ett betänkande?', a: ['Utskottets råd om vad riksdagen borde rösta', 'Regeringens förslag till en helt ny lag', 'Det färdiga beslutet efter omröstningen', 'Talmannens förslag på ny statsminister'], why: 'Utskottet skriver ett betänkande. Det är ett råd till riksdagen.' }
+    ] },
+    { namn: 'Kammaren och talmannen', q: [
+      { t: 'order', q: 'Hur blir ett förslag till ett beslut? Tryck i rätt ordning.', steg: ['Förslaget kommer in till riksdagen', 'Ett utskott fördjupar sig i frågan', 'Utskottet skriver ett betänkande', 'Kammaren debatterar', 'Kammaren röstar'], why: 'Förslag, utskott, betänkande, debatt i kammaren och till sist omröstning.' },
+      { t: 'mc', q: 'Var samlas alla ledamöter för att debattera och rösta?', a: ['I kammaren, som också kallas plenarsalen', 'I ett av riksdagens femton utskott', 'På ett av regeringens departement', 'I kommunfullmäktige eller regionfullmäktige'], why: 'Det slutgiltiga beslutet fattas genom omröstning i kammaren (plenarsalen).' },
+      { t: 'mc', q: 'Vem leder riksdagens arbete?', a: ['Talmannen', 'Statsministern', 'Kungen', 'Finansministern'], why: 'Talmannen leder riksdagens arbete.' },
+      { t: 'multi', q: 'Vilka är talmannens uppgifter?', n: 3, a: ['Leda debatterna i kammaren', 'Se till att riksdagens regler följs', 'Föreslå en ny statsminister efter ett val', 'Utse ministrarna', 'Skriva lagförslagen'], why: 'Talmannen leder debatterna, ser till att reglerna följs och föreslår statsminister. Ministrarna utses av statsministern.' },
+      { t: 'mc', q: 'Vilken är talmannens absolut viktigaste uppgift?', a: ['Leda förhandlingarna efter ett val och föreslå en ny statsminister', 'Hålla tal på nationaldagen och ta emot gäster från andra länder', 'Räkna alla röster i valet och meddela vem som har vunnit', 'Bestämma hur statens pengar ska fördelas i budgeten'], why: 'Efter ett val leder talmannen förhandlingarna och föreslår en statsminister som riksdagen röstar om.' },
+      { t: 'tf', q: 'Det är talmannen som bestämmer vem som blir statsminister.', c: false, why: 'Talmannen föreslår. Det är riksdagen som röstar om förslaget.' }
+    ] }
+  ],
+  forklara: [
+    { q: 'Hur påverkas riksdagen av valresultatet?', punkter: ['Sverige har ett proportionellt valsystem.', 'Riksdagen speglar valresultatet exakt.', 'Exempel: ett parti som får 15 % av rösterna får också 15 % av platserna (mandaten).'], a: 'Koppla till begreppet representativ demokrati: eftersom mandaten fördelas efter rösterna blir riksdagen en bild av vad folket tycker.' },
+    { q: 'Hur många mandat finns det i riksdagen, hur många innebär majoritet och vad kallas en person med ett mandat?', punkter: ['349 mandat (platser).', 'Antalet är udda för att undvika oavgjorda omröstningar.', 'Minst 175 mandat krävs för majoritet.', 'En person med ett mandat kallas riksdagsledamot.'], a: 'Förklara varför 175 är gränsen: hälften av 349 är 174,5. Med 175 har man alltså mer än hälften.' },
+    { q: 'Hur är riksdagen organiserad i arbetet kring olika motioner och propositioner?', punkter: ['Proposition: lagförslag från regeringen.', 'Motion: lagförslag från en enskild riksdagsledamot eller en grupp i riksdagen.', 'Förslaget skickas till ett av riksdagens 15 utskott, till exempel Utbildningsutskottet eller Trafikutskottet.', 'Utskottet är en expertgrupp av politiker som fördjupar sig i frågan och skriver ett betänkande (ett råd om vad riksdagen borde rösta).', 'Alla ledamöter samlas i kammaren (plenarsalen), debatterar och fattar det slutgiltiga beslutet genom omröstning.'], a: 'Förklara varför utskotten finns: 349 ledamöter kan inte vara experter på allt. Därför får en mindre grupp gå igenom frågan ordentligt först. Då blir besluten bättre genomtänkta.' },
+    { q: 'Vem leder riksdagens arbete och vilka uppgifter har den personen?', punkter: ['Talmannen leder riksdagens arbete.', 'Leder debatterna i kammaren.', 'Ser till att riksdagens regler följs.', 'Viktigaste uppgiften: leda förhandlingarna efter ett val och föreslå en ny statsminister som riksdagen ska rösta om.'], a: 'Koppla till nyheterna: efter valet i september 2026 har talmannen Andreas Norlén haft samtal med partiledarna och gett Magdalena Andersson i uppdrag att undersöka om hon kan bilda regering. Det är precis den här uppgiften.' }
+  ]
+},
+
+/* ───────────────────────── DEL 6 ───────────────────────── */
+{
+  id: 'd6',
+  titel: 'Regeringen',
+  kort: [
+    { h: 'Så utses regeringen', t: ['1. Efter ett val <b>föreslår talmannen</b> en statsminister.', '2. <b>Riksdagen röstar</b> om förslaget.', '3. Statsministern blir godkänd så länge <b>inte en majoritet (175 eller fler) röstar NEJ</b>.', '4. Statsministern <b>utser själv sina ministrar</b> (statsråd) som ska sitta i regeringen.'], knep: 'Det behövs inte 175 ja. Det räcker att färre än 175 säger nej.' },
+    { h: 'Vad gör regeringen?', t: ['Regeringen <b>styr Sverige</b>. Det betyder att den leder landets dagliga arbete och <b>verkställer</b> (genomför) de beslut som riksdagen fattar.', 'Uppgifter:', 'Lägga fram lagförslag (propositioner).', 'Lägga fram statsbudgeten.', 'Sköta utrikespolitiken.', 'Styra de statliga myndigheterna.'], knep: 'Verkställa = göra verklighet av besluten.' },
+    { h: 'Samspelet med riksdagen', t: ['<b>Riksdagen</b> beslutar och stiftar lagar.', '<b>Regeringen</b> föreslår och ser till att besluten blir verklighet.'], knep: 'Regeringen föreslår. Riksdagen beslutar. Regeringen genomför.' },
+    { h: 'Departement och myndigheter', t: ['Regeringen är uppdelad i <b>departement</b>. Där arbetar ministrarna med sina expertområden. Exempel: Försvarsdepartementet och Finansdepartementet.', 'Under departementen finns <b>myndigheter</b>. De utför det praktiska arbetet i samhället. Exempel: Polisen, Skatteverket och Trafikverket.'], knep: 'Departementet planerar. Myndigheten gör jobbet.' },
+    { h: 'Fyra sorters regeringar', t: ['<b>Majoritetsregering:</b> har över hälften av mandaten.', '<b>Minoritetsregering:</b> har under hälften av mandaten och måste samarbeta.', '<b>Koalitionsregering:</b> flera partier regerar tillsammans.', '<b>Enpartiregering:</b> ett enda parti regerar.'], knep: 'Två frågor: Hur många mandat? (majoritet eller minoritet) Hur många partier? (koalition eller enparti)' },
+    { h: 'Sveriges regering idag', t: ['Regeringen består av <b>Moderaterna (M), Kristdemokraterna (KD) och Liberalerna (L)</b>.', 'Det är en <b>koalitionsregering</b> (flera partier) och en <b>minoritetsregering</b> (under hälften av mandaten).', 'Den har ett nära budgetsamarbete med <b>Sverigedemokraterna (SD)</b>.', 'Nytt efter valet i september 2026: regeringen sitter kvar som övergångsregering tills riksdagen har röstat fram en ny statsminister. Talmannen har gett Magdalena Andersson (S) i uppdrag att undersöka om hon kan bilda en ny regering.'], knep: 'Kolla nyheterna dagen före provet. Det här kan ha ändrats.' },
+    { h: 'Varför röstar riksdagen oftast JA?', t: ['Regeringen har nästan alltid <b>förankrat</b> sina förslag hos sina samarbetspartier i riksdagen i förväg.', 'Regeringen lägger sällan fram en proposition om den vet att den kommer att förlora omröstningen.'], knep: 'Förankra = fråga först, föreslå sen.' },
+    { h: 'Svåra ord i del 6', t: ['<b>Statsråd:</b> ett annat ord för minister.', '<b>Verkställa:</b> genomföra, se till att det blir gjort.', '<b>Koalition:</b> flera partier som sitter i regeringen tillsammans.', '<b>Budgetsamarbete:</b> partier som kommer överens om hur statens pengar ska användas.', '<b>Förankra:</b> kolla att andra håller med innan man föreslår något.', '<b>Övergångsregering:</b> en regering som sitter kvar tillfälligt tills en ny är utsedd.'] }
+  ],
+  rundor: [
+    { namn: 'Så utses regeringen', q: [
+      { t: 'order', q: 'Hur utses regeringen? Tryck i rätt ordning.', steg: ['Det hålls val', 'Talmannen föreslår en statsminister', 'Riksdagen röstar om förslaget', 'Statsministern utser sina ministrar'], why: 'Val, förslag från talmannen, omröstning i riksdagen, och sedan väljer statsministern sina ministrar.' },
+      { t: 'mc', q: 'När blir en föreslagen statsminister godkänd?', a: ['När färre än 175 ledamöter röstar nej', 'När minst 175 ledamöter röstar ja', 'När kungen har godkänt förslaget', 'När alla åtta partier är överens'], why: 'Statsministern blir godkänd så länge inte en majoritet (175 eller fler) röstar nej.' },
+      { t: 'tf', q: 'En statsminister måste få minst 175 ja-röster för att bli vald.', c: false, why: 'Det räcker att färre än 175 röstar nej.' },
+      { t: 'mc', q: '170 ledamöter röstar nej till förslaget på statsminister. Vad händer?', a: ['Statsministern blir godkänd', 'Förslaget faller direkt', 'Det blir nyval i hela landet', 'Kungen får avgöra saken'], why: 'Det krävs 175 nej för att stoppa förslaget. 170 räcker inte.' },
+      { t: 'mc', q: 'Vem utser ministrarna i regeringen?', a: ['Statsministern', 'Talmannen', 'Riksdagen', 'Kungen'], why: 'När statsministern är vald utser han eller hon själv sina ministrar.' },
+      { t: 'mc', q: 'Vad kallas ministrarna också?', a: ['Statsråd', 'Riksdagsledamöter', 'Språkrör', 'Röstmottagare'], why: 'Ministrarna kallas också statsråd.' }
+    ] },
+    { namn: 'Vad gör regeringen?', q: [
+      { t: 'mc', q: 'Vad menas med att regeringen styr Sverige?', a: ['Den leder landets dagliga arbete och genomför riksdagens beslut', 'Den stiftar alla lagar på egen hand utan att fråga riksdagen', 'Den dömer i domstolarna efter de lagar som riksdagen stiftat', 'Den bestämmer vilka personer som får sitta i riksdagen'], why: 'Regeringen leder det dagliga arbetet och verkställer, alltså genomför, riksdagens beslut.' },
+      { t: 'multi', q: 'Vilka är regeringens uppgifter?', n: 4, a: ['Lägga fram lagförslag (propositioner)', 'Lägga fram statsbudgeten', 'Sköta utrikespolitiken', 'Styra de statliga myndigheterna', 'Stifta lagar', 'Döma i domstol'], why: 'Regeringen föreslår lagar och budget, sköter utrikespolitiken och styr myndigheterna. Det är riksdagen som stiftar lagar och domstolarna som dömer.' },
+      { t: 'mc', q: 'Vem är det som beslutar och stiftar lagar?', a: ['Riksdagen', 'Regeringen', 'Myndigheterna', 'Departementen'], why: 'Riksdagen beslutar och stiftar lagar. Regeringen föreslår och ser till att besluten blir verklighet.' },
+      { t: 'match', q: 'Vad är vad? Para ihop exemplen med rätt förklaring.', par: [['Försvarsdepartementet och Finansdepartementet', 'Delar av regeringen där ministrarna arbetar'], ['Polisen, Skatteverket och Trafikverket', 'Myndigheter som gör det praktiska arbetet'], ['Utbildningsutskottet och Trafikutskottet', 'Expertgrupper av politiker i riksdagen']], why: 'Departementen är delar av regeringen. Myndigheterna finns under departementen. Utskotten hör till riksdagen.' },
+      { t: 'mc', q: 'Var arbetar ministrarna med sina expertområden?', a: ['På departementen', 'På myndigheterna', 'I utskotten', 'I kammaren'], why: 'Regeringen är uppdelad i departement, till exempel Försvarsdepartementet och Finansdepartementet.' },
+      { t: 'mc', q: 'Vad gör myndigheterna?', a: ['Utför det praktiska arbetet i samhället', 'Stiftar lagar och fattar beslut om skatter', 'Väljer statsminister efter ett val', 'Skriver betänkanden till riksdagen'], why: 'Departementen planerar. Myndigheterna utför det praktiska arbetet.' }
+    ] },
+    { namn: 'Olika sorters regeringar', q: [
+      { t: 'match', q: 'Para ihop regeringstypen med rätt förklaring.', par: [['Majoritetsregering', 'Har över hälften av mandaten'], ['Minoritetsregering', 'Har under hälften, måste samarbeta'], ['Koalitionsregering', 'Flera partier regerar tillsammans'], ['Enpartiregering', 'Ett enda parti regerar']], why: 'Majoritet och minoritet handlar om antal mandat. Koalition och enparti handlar om antal partier.' },
+      { t: 'mc', q: 'Vilka tre partier bildade regering efter valet 2022?', a: ['M, KD och L', 'S, V och MP', 'M, SD och C', 'S, C och L'], why: 'Moderaterna, Kristdemokraterna och Liberalerna. Efter valet 2026 sitter de kvar som övergångsregering tills riksdagen har röstat fram en ny statsminister.' },
+      { t: 'mc', q: 'Regeringen med M, KD och L är en koalitionsregering. Vad är den också?', a: ['En minoritetsregering', 'En majoritetsregering', 'En enpartiregering', 'En diktatur'], why: 'De tre partierna har tillsammans under hälften av mandaten. Därför måste de samarbeta med andra.' },
+      { t: 'mc', q: 'Vilket parti har regeringen med M, KD och L ett nära budgetsamarbete med?', a: ['Sverigedemokraterna', 'Socialdemokraterna', 'Vänsterpartiet', 'Miljöpartiet'], why: 'Regeringen med M, KD och L har ett nära budgetsamarbete med Sverigedemokraterna (SD).' },
+      { t: 'mc', q: 'Varför röstar riksdagen oftast ja till regeringens förslag?', a: ['Regeringen har förankrat förslagen hos sina samarbetspartier i förväg', 'Riksdagen måste enligt grundlagen alltid rösta ja till regeringen', 'Talmannen bestämmer i förväg hur alla ledamöter ska rösta', 'Kungen har redan godkänt förslagen innan riksdagen röstar'], why: 'Regeringen pratar med sina samarbetspartier innan den lägger fram ett förslag.' },
+      { t: 'tf', q: 'Regeringen lägger ofta fram propositioner som den vet att den kommer att förlora.', c: false, why: 'Regeringen lägger sällan fram en proposition om den vet att den kommer att förlora omröstningen.' }
+    ] }
+  ],
+  forklara: [
+    { q: 'Hur är regeringen utsedd?', punkter: ['Efter ett val föreslår talmannen en statsminister.', 'Riksdagen röstar om förslaget.', 'Statsministern blir godkänd så länge inte en majoritet (175 eller fler) röstar nej.', 'Statsministern utser sedan själv sina ministrar (statsråd).'], a: 'Koppla till parlamentarismen: regeln om 175 nej gör att regeringen måste accepteras av riksdagen. Den behöver inte ha aktivt stöd av en majoritet. Därför kan Sverige ha minoritetsregeringar.' },
+    { q: 'Vilka är regeringens uppgifter och vad menas med att den styr Sverige samt dess samspel med riksdagen?', punkter: ['Att styra Sverige betyder att leda landets dagliga arbete och verkställa (genomföra) riksdagens beslut.', 'Uppgifter: lägga fram lagförslag (propositioner), lägga fram statsbudgeten, sköta utrikespolitiken och styra de statliga myndigheterna.', 'Samspelet: riksdagen beslutar och stiftar lagar. Regeringen föreslår och ser till att besluten blir verklighet.'], a: 'Beskriv samspelet som en kedja: regeringen föreslår (proposition), riksdagen beslutar, regeringen genomför med hjälp av myndigheterna.' },
+    { q: 'Hur är regeringen organiserad (departement/myndigheter) och hur ser Sveriges regering ut idag?', punkter: ['Regeringen är uppdelad i departement där ministrarna arbetar med sina expertområden. Exempel: Försvarsdepartementet, Finansdepartementet.', 'Under departementen finns myndigheter som utför det praktiska arbetet i samhället. Exempel: Polisen, Skatteverket, Trafikverket.', 'Regeringen idag: en koalitions- och minoritetsregering med Moderaterna (M), Kristdemokraterna (KD) och Liberalerna (L).', 'Den har ett nära budgetsamarbete med Sverigedemokraterna (SD).', 'Nytt efter valet 2026: regeringen sitter kvar som övergångsregering tills riksdagen har röstat fram en ny statsminister.'], a: 'Använd begreppen på regeringen: flera partier ger en koalitionsregering. Under hälften av mandaten ger en minoritetsregering. Därför behövde regeringen samarbetet med SD för att få igenom budgeten.' },
+    { q: 'Vilka olika typer av regeringar finns det, och varför röstar riksdagen oftast JA till regeringens förslag?', punkter: ['Majoritetsregering: har över hälften av mandaten.', 'Minoritetsregering: har under hälften av mandaten och måste samarbeta.', 'Koalitionsregering: flera partier samregerar.', 'Enpartiregering: ett parti regerar.', 'Riksdagen röstar oftast ja eftersom regeringen nästan alltid har förankrat sina förslag hos samarbetspartierna i förväg.', 'Regeringen lägger sällan fram en proposition om den vet att den kommer att förlora.'], a: 'Jämför: en majoritetsregering får lätt igenom sina förslag. En minoritetsregering måste förhandla och kompromissa med andra partier. Därför är förankringen extra viktig för den.' }
+  ]
+},
+
+/* ───────────────────────── DEL 7 ───────────────────────── */
+{
+  id: 'd7',
+  titel: 'Mediernas roll',
+  kort: [
+    { h: 'Mediernas tre uppgifter', t: ['<b>Informera</b> medborgarna om viktiga händelser.', '<b>Granska</b> makthavare, så att politiker och företag inte missbrukar sin makt eller slösar med skattepengar.', 'Erbjuda en plattform för <b>debatt</b>, där olika åsikter får höras.'], knep: 'I, G, D: Informera, Granska, Debatt.' },
+    { h: 'Den tredje statsmakten', t: ['Medierna kallas den tredje statsmakten.', 'De har stor makt att styra vad människor <b>pratar om och tycker</b>.', 'Den första statsmakten är riksdagen. Den andra är regeringen.'], knep: '1 riksdagen, 2 regeringen, 3 medierna.' },
+    { h: 'Pressetiska regler', t: ['Radio, tv och tidningar följer pressetiska regler. De ska:', 'Hålla sig till <b>sanningen</b>.', 'Kontrollera sina <b>källor</b> noga (vara källkritiska).', 'Ge den anklagade chansen att <b>försvara sig</b>.', 'Respektera människors <b>privatliv</b>. Inte publicera namn eller bild om det inte finns ett väldigt stort allmänintresse.'], knep: 'Sant, kollat, båda sidor, privat.' },
+    { h: 'Sociala medier är annorlunda', t: ['Tidningar har en <b>ansvarig utgivare</b> som kontrollerar sanningen före publicering.', 'Sociala medier har <b>ingen</b> ansvarig utgivare.'], knep: 'Ingen kollar innan du trycker på publicera.' },
+    { h: 'Tre risker med sociala medier', t: ['<b>Desinformation (fake news):</b> falska nyheter och rykten sprids extremt snabbt för att lura människor eller skapa splittring.', '<b>Filterbubblor:</b> algoritmer visar bara sådant du redan håller med om. Då ser du inte andra perspektiv och dina åsikter kan bli extrema.', '<b>Nätmobbning och hat:</b> anonymitet gör det lättare för människor att näthata och sprida kränkningar.'], knep: 'Falskt, bubbla, hat.' },
+    { h: 'Svåra ord i del 7', t: ['<b>Makthavare:</b> de som har makt, till exempel politiker och stora företag.', '<b>Källkritisk:</b> att kolla var en uppgift kommer ifrån och om den stämmer.', '<b>Allmänintresse:</b> när något är viktigt för många att få veta.', '<b>Ansvarig utgivare:</b> personen som har ansvar för det som publiceras.', '<b>Algoritm:</b> ett datorprogram som väljer vad du får se.', '<b>Desinformation:</b> falsk information som sprids med flit.', '<b>Pressetiska regler:</b> regler för hur medier ska bete sig.', '<b>Splittring:</b> när människor delas upp i grupper som bråkar.', '<b>Kränkning:</b> något som sårar och förnedrar en annan människa.'] }
+  ],
+  rundor: [
+    { namn: 'Den tredje statsmakten', q: [
+      { t: 'multi', q: 'Vilka tre uppgifter har medierna i en demokrati?', n: 3, a: ['Informera medborgarna', 'Granska makthavare', 'Erbjuda en plattform för debatt', 'Stifta lagar', 'Utse statsministern'], why: 'Informera, granska och ge plats för debatt.' },
+      { t: 'mc', q: 'Varför är det viktigt att medierna granskar makthavare?', a: ['Så att makthavare inte missbrukar sin makt', 'Så att politiker och företag blir mer kända', 'Så att tidningarna kan sälja fler annonser', 'Så att regeringen kan styra vad som skrivs'], why: 'Granskningen gör att politiker och företag får svårare att missbruka sin makt eller slösa med skattepengar.' },
+      { t: 'match', q: 'Vilken är vilken?', par: [['Första statsmakten', 'Riksdagen'], ['Andra statsmakten', 'Regeringen'], ['Tredje statsmakten', 'Medierna']], why: 'Riksdagen är den första, regeringen den andra och medierna den tredje.' },
+      { t: 'mc', q: 'Varför kallas medierna för den tredje statsmakten?', a: ['De har stor makt att styra vad människor pratar om och tycker', 'De har makt att stifta lagar tillsammans med riksdagen', 'De väljs av folket i allmänna val vart fjärde år', 'De är en del av regeringen och lyder under statsministern'], why: 'Medierna har stor makt över vad människor pratar om och tycker, vid sidan av riksdagen och regeringen.' },
+      { t: 'mc', q: 'Medierna erbjuder en plattform för debatt. Vad betyder det?', a: ['Olika åsikter får höras', 'Bara regeringens åsikter får höras', 'Medierna bestämmer vem som har rätt', 'Debatter får inte sändas i tv'], why: 'I en demokrati ska olika åsikter få höras.' }
+    ] },
+    { namn: 'Pressens regler', q: [
+      { t: 'multi', q: 'Vilka hör till de pressetiska reglerna?', n: 4, a: ['Hålla sig till sanningen', 'Kontrollera sina källor noga', 'Låta den anklagade försvara sig', 'Respektera människors privatliv', 'Publicera så snabbt som möjligt', 'Alltid skriva ut namn och bild'], why: 'Sant, kollat, båda sidor och respekt för privatlivet.' },
+      { t: 'mc', q: 'När får medier publicera namn eller bild på en person?', a: ['Bara om allmänintresset är väldigt stort', 'Alltid, så länge det som skrivs är sant', 'Aldrig, oavsett vad personen har gjort', 'Bara om personen själv ber om det'], why: 'Medierna ska respektera privatlivet. Namn och bild publiceras bara om allmänintresset är väldigt stort.' },
+      { t: 'mc', q: 'Vad betyder det att vara källkritisk?', a: ['Att noga kontrollera sina källor', 'Att aldrig använda några källor', 'Att bara lita på sociala medier', 'Att kritisera alla politiker'], why: 'Medierna måste kontrollera sina källor noga.' },
+      { t: 'mc', q: 'Vilka följer de pressetiska reglerna?', a: ['Radio, tv och tidningar', 'Alla konton på sociala medier', 'Bara riksdagens ledamöter', 'Bara regeringens ministrar'], why: 'De traditionella medierna (radio, tv och tidningar) följer pressetiska regler.' },
+      { t: 'tf', q: 'Enligt de pressetiska reglerna ska den som blir anklagad få chansen att försvara sig.', c: true, why: 'Båda sidor ska få komma till tals.' }
+    ] },
+    { namn: 'Sociala medier', q: [
+      { t: 'mc', q: 'Vad har tidningar som sociala medier saknar?', a: ['En ansvarig utgivare som kontrollerar före publicering', 'En algoritm som väljer vad varje läsare ska få se', 'En möjlighet att lägga upp både bilder och text', 'En stor publik som kan läsa det som skrivs'], why: 'På sociala medier finns ingen ansvarig utgivare som kontrollerar innan något publiceras.' },
+      { t: 'match', q: 'Para ihop risken med rätt förklaring.', par: [['Desinformation (fake news)', 'Falska nyheter och rykten sprids snabbt'], ['Filterbubblor', 'Du ser bara sådant du redan håller med om'], ['Nätmobbning och hat', 'Anonymitet gör det lättare att kränka andra']], why: 'Tre risker: falskt, bubbla och hat.' },
+      { t: 'mc', q: 'Vad kan hända om du fastnar i en filterbubbla?', a: ['Du ser inte andra perspektiv och dina åsikter kan bli extrema', 'Du får se fler olika åsikter än vad du gjorde tidigare', 'Du blir mer källkritisk och kollar fakta oftare', 'Dina inlägg försvinner och ingen kan se dem'], why: 'Algoritmerna visar bara sådant du redan håller med om.' },
+      { t: 'mc', q: 'Varför sprider någon desinformation?', a: ['För att lura människor eller skapa splittring', 'För att följa de pressetiska reglerna', 'För att granska politiker och företag', 'För att skydda människors privatliv'], why: 'Falska nyheter och rykten sprids extremt snabbt för att lura människor eller skapa splittring.' },
+      { t: 'mc', q: 'Vad är det som väljer vad du får se i ditt flöde?', a: ['Algoritmer', 'En ansvarig utgivare', 'Riksdagen', 'Röstmottagare'], why: 'Algoritmer visar sådant du redan håller med om. Så uppstår filterbubblor.' },
+      { t: 'mc', q: 'Varför är det lättare att näthata på sociala medier?', a: ['Man kan vara anonym', 'Det är helt lagligt', 'Ingen läser inläggen', 'Alla gör likadant'], why: 'Anonymitet gör det lättare för människor att näthata och sprida kränkningar.' }
+    ] }
+  ],
+  forklara: [
+    { q: 'Vilken uppgift har medierna i en demokrati och varför kallas de för ”Den tredje statsmakten”?', punkter: ['Informera medborgarna om viktiga händelser.', 'Granska makthavare, så att politiker och företag inte missbrukar sin makt eller slösar med skattepengar.', 'Erbjuda en plattform för debatt där olika åsikter får höras.', 'De kallas den tredje statsmakten eftersom de har stor makt att styra vad människor pratar om och tycker.', 'Den första statsmakten är riksdagen och den andra är regeringen.'], a: 'Resonera om vad som händer utan fria medier: då granskas inte makthavarna, och folket får inte veta om makt missbrukas. Då blir det svårt att rösta klokt. Medierna behövs alltså för att demokratin ska fungera.' },
+    { q: 'Vilka etiska regler finns för radio, tv och tidningar?', punkter: ['De traditionella medierna följer pressetiska regler.', 'Hålla sig till sanningen.', 'Kontrollera sina källor noga (vara källkritiska).', 'Ge den anklagade chansen att försvara sig.', 'Respektera människors privatliv: inte publicera namn eller bild om det inte finns ett väldigt stort allmänintresse.'], a: 'Väg två saker mot varandra: allmänhetens rätt att få veta och den enskildes rätt till privatliv. Det finns ett stort allmänintresse av att få veta om en politiker fuskar. För en vanlig privatperson finns det oftast inte.' },
+    { q: 'Vilka risker finns med sociala medier?', punkter: ['Sociala medier har ingen ansvarig utgivare som kontrollerar sanningen före publicering.', 'Desinformation (fake news): falska nyheter och rykten sprids extremt snabbt för att lura människor eller skapa splittring.', 'Filterbubblor: algoritmer visar bara sådant du redan håller med om. Du ser inte andra perspektiv och åsikterna kan bli extrema.', 'Nätmobbning och hat: anonymitet gör det lättare att näthata och sprida kränkningar.'], a: 'Koppla riskerna till demokratin: om många tror på falska nyheter och bara ser en sida av saken blir det svårare att debattera och rösta utifrån fakta.' }
+  ]
+}
+];
+
+</script>
+<script>
+(function () {
+  'use strict';
+  const app = document.getElementById('app');
+  /* Allt ämnesspecifikt kommer från KONFIG i data.js. */
+  const K = Object.assign({ id: 'quiz-v1', elev: '', amne: '', mjuka: [], vuxna: [], vuxnaRubrik: 'För vuxna: det här är ändrat mot instuderingsbladet' }, typeof KONFIG === 'object' ? KONFIG : {});
+  const M = Object.assign({ antal: 100, mal: 50, enhet: 'poäng', malNamn: 'halvvägs', bild: 'Halvcirkel med 100 platser' }, K.matare || {});
+  const KEY = K.id;
+  /* xp, dagar (dagar i rad) och best (rekord) är nya. Äldre sparningar saknar dem och får nollor. */
+  function nyttS() { return { stars: {}, ex: {}, miss: {}, day: { d: '', n: 0 }, xp: 0, dagar: { d: '', n: 0 }, best: { svit: 0, blitz: 0 } }; }
+  let S = nyttS();
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) {
+      const p = JSON.parse(raw);
+      if (p && typeof p === 'object') {
+        S.stars = p.stars || {}; S.ex = p.ex || {}; S.miss = p.miss || {}; S.day = p.day || S.day;
+        S.xp = +p.xp || 0; if (p.dagar && p.dagar.d) S.dagar = p.dagar; if (p.best) Object.assign(S.best, p.best);
+      }
+    }
+  } catch (e) { /* utan sparning fungerar sidan ändå */ }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* ok */ } }
+  function dagStr(d) { return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+  function idag() { return dagStr(new Date()); }
+  function igar() { const d = new Date(); d.setDate(d.getDate() - 1); return dagStr(d); }
+  /* Dagar i rad: räknas upp första gången man blir klar med något en ny dag. */
+  function dagSvit() { const t = idag(); if (S.dagar.d === t) return false; S.dagar = { d: t, n: S.dagar.d === igar() ? S.dagar.n + 1 : 1 }; return true; }
+  function aktivSvit() { return S.dagar.d === idag() || S.dagar.d === igar() ? S.dagar.n : 0; }
+  /* XP och nivåer: nivå n kräver 100·n XP till nästa. */
+  function niva(xp) { let n = 1, krav = 100; while (xp >= krav) { xp -= krav; n++; krav = 100 * n; } return { n: n, i: xp, krav: krav }; }
+  /* Ljud (av som standard) och vibration gäller hela enheten, inte ett visst quiz. */
+  const PKEY = 'quizmotor-installningar';
+  const PREF = { ljud: false, vib: true };
+  try { Object.assign(PREF, JSON.parse(localStorage.getItem(PKEY)) || {}); } catch (e) { /* ok */ }
+  function dagKoll() { if (!S.day || S.day.d !== idag()) S.day = { d: idag(), n: 0 }; }
+  dagKoll();
+
+  const ALLA = [];
+  DELAR.forEach(function (d, di) {
+    d.nr = di + 1;
+    d.rundor.forEach(function (r, ri) {
+      r.id = d.id + 'r' + ri; r.del = d;
+      r.q.forEach(function (q, qi) { q.id = r.id + 'q' + qi; ALLA.push(q); });
+    });
+    d.forklara.forEach(function (f, fi) { f.id = d.id + 'f' + fi; f.del = d; });
+  });
+  const RUNDOR = DELAR.reduce(function (a, d) { return a.concat(d.rundor); }, []);
+  const FORKLARA = DELAR.reduce(function (a, d) { return a.concat(d.forklara); }, []);
+  const DAGSMAL = 3;
+  const TAL = ['noll', 'ett', 'två', 'tre', 'fyra', 'fem', 'sex'];
+
+  /* ───── Hjälpfunktioner ───── */
+  function el(tag, props, kids) {
+    const e = document.createElement(tag);
+    if (props) for (const k in props) {
+      const v = props[k];
+      if (v == null || v === false) continue;
+      if (k === 'class') e.className = v;
+      else if (k === 'html') e.innerHTML = v;
+      else if (k === 'text') e.textContent = v;
+      else if (k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), v);
+      else e.setAttribute(k, v === true ? '' : v);
+    }
+    if (kids != null) (Array.isArray(kids) ? kids : [kids]).forEach(function (c) {
+      if (c == null || c === false) return;
+      e.append(c.nodeType ? c : document.createTextNode(String(c)));
+    });
+    return e;
+  }
+  function blanda(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  let fxNr = 0;
+  function show(nodes) {
+    tyst(); fxNr++;
+    try { const c = document.getElementById('fx'); c.getContext('2d').clearRect(0, 0, c.width, c.height); } catch (e) { /* ok */ }
+    app.replaceChildren.apply(app, nodes.filter(Boolean));
+    window.scrollTo(0, 0);
+  }
+  function ren(html) { return String(html).replace(/<[^>]+>/g, ''); }
+  /* Långa sammansatta ord får ett mjukt bindestreck så de bryts snyggt i smala knappar. */
+  const MJUK = {};
+  K.mjuka.forEach(function (w) { MJUK[w.replace('|', '')] = w.replace('|', '\u00AD'); });
+  function mjuk(txt) { return String(txt).replace(/[A-Za-zÅÄÖåäöé]+/g, function (w) { return MJUK[w] || w; }); }
+  function skak(b) { b.classList.add('skak'); setTimeout(function () { b.classList.remove('skak'); }, 350); }
+
+  const STJ = 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z';
+  function stjarnor(n, stor) {
+    let s = '';
+    for (let i = 0; i < 3; i++) s += '<svg viewBox="0 0 24 24" aria-hidden="true"><path class="' + (i < n ? 'pa' : 'av') + '" d="' + STJ + '"/></svg>';
+    return el('span', { class: 'stars' + (stor ? ' big' : ''), html: s, role: 'img', 'aria-label': n + ' av 3 stjärnor' });
+  }
+
+  const ELD = '<svg class="ikon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 4 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3-1-3 0-6 1-9.5z"/></svg>';
+  const BLIXT = '<svg class="ikon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>';
+  function chip(html, extra) { return el('span', { class: 'chip' + (extra ? ' ' + extra : ''), html: html }); }
+  function bump(e) { e.classList.remove('bump'); void e.offsetWidth; e.classList.add('bump'); }
+  let AC = null;
+  function ljud(typ) {
+    if (!PREF.ljud) return;
+    try {
+      AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+      ({ ratt: [660, 880], fel: [196], fest: [523, 659, 784, 1047] })[typ].forEach(function (f, i) {
+        const o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime + i * 0.08;
+        o.type = typ === 'fel' ? 'triangle' : 'sine'; o.frequency.value = f;
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.05, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+        o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + 0.18);
+      });
+    } catch (e) { /* inget ljud */ }
+  }
+  function vib(m) { if (PREF.vib && navigator.vibrate) { try { navigator.vibrate(m); } catch (e) { /* ok */ } } }
+  function respons(ratt, fest) { if (fest) { ljud('fest'); vib([15, 40, 15]); } else if (ratt) { ljud('ratt'); vib(12); } else { ljud('fel'); vib([30, 40, 30]); } }
+  function nivaRad() {
+    const nv = niva(S.xp);
+    return el('div', { class: 'niva' }, [el('span', { html: 'Nivå <b>' + nv.n + '</b>' }), el('span', { class: 'bar' }, el('i', { style: 'width:' + Math.round(100 * nv.i / nv.krav) + '%' })), el('span', { class: 'small muted', text: nv.i + ' / ' + nv.krav + ' XP' })]);
+  }
+  /* Det man vann: XP, längsta svit, dagar i rad och ny nivå. Delas av resultatsidorna. */
+  function vinster(xp, basta, nySvit, nyDag, nyNiva) {
+    return el('div', { class: 'stack-s vinst' }, [
+      el('div', { class: 'status' }, [
+        xp ? chip('<b>+' + xp + '</b> XP') : null,
+        basta >= 2 ? chip(ELD + ' <b>' + basta + '</b> rätt i rad' + (nySvit ? ' · nytt rekord!' : '')) : null,
+        nyDag && S.dagar.n > 1 ? chip(ELD + ' Dag <b>' + S.dagar.n + '</b> i rad') : null
+      ]),
+      nyNiva ? el('p', { class: 'fest', text: 'Ny nivå! Du är nu på nivå ' + niva(S.xp).n + '.' }) : null,
+      nivaRad()
+    ]);
+  }
+
+  function poang() {
+    let s = 0, max = 0;
+    RUNDOR.forEach(function (r) { max += 3; s += S.stars[r.id] || 0; });
+    FORKLARA.forEach(function (f) { max += 2; s += S.ex[f.id] || 0; });
+    return { s: s, max: max, mandat: Math.round(M.antal * s / max) };
+  }
+  function delPoang(d) {
+    let s = 0, max = 0;
+    d.rundor.forEach(function (r) { max += 3; s += S.stars[r.id] || 0; });
+    d.forklara.forEach(function (f) { max += 2; s += S.ex[f.id] || 0; });
+    return { s: s, max: max };
+  }
+
+  /* Mätaren: M.antal platser i en halvcirkel. Fylls från vänster. */
+  function riksdagSvg(n, fran) {
+    if (fran == null) fran = n;
+    const rows = 9, r0 = 52, dr = 10.5, cx = 150, cy = 150, seats = [];
+    const radii = []; for (let i = 0; i < rows; i++) radii.push(r0 + i * dr);
+    const sum = radii.reduce(function (a, b) { return a + b; }, 0);
+    const counts = radii.map(function (r) { return Math.round(M.antal * r / sum); });
+    counts[rows - 1] += M.antal - counts.reduce(function (a, b) { return a + b; }, 0);
+    radii.forEach(function (r, i) {
+      for (let k = 0; k < counts[i]; k++) {
+        const a = Math.PI - Math.PI * (k + 0.5) / counts[i];
+        seats.push({ a: a, x: cx + r * Math.cos(a), y: cy - r * Math.sin(a) });
+      }
+    });
+    seats.sort(function (p, q) { return q.a - p.a; });
+    let out = '<svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">';
+    seats.forEach(function (s, i) {
+      out += '<circle cx="' + s.x.toFixed(1) + '" cy="' + s.y.toFixed(1) + '" r="3.1" fill="' + (i < fran ? 'var(--sea)' : i < n ? 'var(--sun)" class="ny' : 'var(--seat)') + '"/>';
+    });
+    out += '<line x1="150" y1="14" x2="150" y2="100" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3" fill="none"/>';
+    out += '<text x="150" y="9" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="var(--display)">' + M.mal + ' = ' + M.malNamn + '</text>';
+    return out + '</svg>';
+  }
+
+  function malRad() {
+    const kids = [el('span', { class: 'small', text: 'Dagens mål: ' + DAGSMAL + ' rundor' })];
+    for (let i = 0; i < DAGSMAL; i++) kids.push(el('span', { class: 'dot' + (i < S.day.n ? ' on' : '') }));
+    if (S.day.n >= DAGSMAL) kids.push(el('span', { class: 'small', text: 'Klart för idag!' }));
+    return el('div', { class: 'goal', role: 'img', 'aria-label': 'Dagens mål: ' + Math.min(S.day.n, DAGSMAL) + ' av ' + DAGSMAL + ' rundor klara' }, kids);
+  }
+
+  /* ───── Uppläsning ───── */
+  const kanLasa = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+  function tyst() { if (kanLasa) { try { window.speechSynthesis.cancel(); } catch (e) { /* ok */ } } }
+  function lasKnapp(text) {
+    if (!kanLasa) return null;
+    const b = el('button', { class: 'btn-las', type: 'button', onclick: function () {
+      try {
+        const roster = window.speechSynthesis.getVoices();
+        const sv = roster.filter(function (v) { return /^sv/i.test(v.lang); })[0];
+        if (roster.length && !sv) { b.textContent = 'Ingen svensk röst på den här enheten'; b.disabled = true; return; }
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(typeof text === 'function' ? text() : text);
+        u.lang = 'sv-SE'; u.rate = 0.92; if (sv) u.voice = sv;
+        window.speechSynthesis.speak(u);
+      } catch (e) { b.hidden = true; }
+    } }, 'Läs upp');
+    return b;
+  }
+
+  /* ───── Konfetti ───── */
+  function konfetti(antal) {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const c = document.getElementById('fx'); if (!c || !c.getContext) return;
+    const ctx = c.getContext('2d'); const w = c.width = window.innerWidth, h = c.height = window.innerHeight;
+    const farg = ['#FFC933', '#1D56C4', '#A9C8F5', '#FAFAF5'];
+    const bitar = []; for (let i = 0; i < (antal || 70); i++) bitar.push({ x: w / 2, y: h * 0.35, vx: (Math.random() - 0.5) * 12, vy: -Math.random() * 11 - 3, s: 5 + Math.random() * 6, f: farg[i % 4], r: Math.random() * 6 });
+    const start = performance.now(), nr = fxNr;
+    (function tick(t) {
+      if (nr !== fxNr) return;
+      const dt = t - start; ctx.clearRect(0, 0, w, h);
+      if (dt > 1600) return;
+      bitar.forEach(function (b) { b.x += b.vx; b.y += b.vy; b.vy += 0.4; b.r += 0.2; ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.r); ctx.globalAlpha = Math.max(0, 1 - dt / 1600); ctx.fillStyle = b.f; ctx.fillRect(-b.s / 2, -b.s / 3, b.s, b.s * 0.66); ctx.restore(); });
+      requestAnimationFrame(tick);
+    })(start);
+  }
+
+  /* ───── Startsidan ───── */
+  function hem() {
+    dagKoll();
+    const p = poang();
+    const nasta = RUNDOR.filter(function (r) { return !(S.stars[r.id] > 0); })[0];
+    const missar = ALLA.filter(function (q) { return S.miss[q.id]; });
+    const kvarEx = FORKLARA.filter(function (f) { return (S.ex[f.id] || 0) < 2; }).length;
+    const sedelFarg = ['gul', 'bla', 'vit'];
+
+    const delar = DELAR.map(function (d, i) {
+      const dp = delPoang(d);
+      return el('li', null, el('button', { class: 'del', type: 'button', onclick: function () { delSida(d); } }, [
+        el('span', { class: 'sedel ' + sedelFarg[i % 3], 'aria-hidden': 'true', text: d.nr }),
+        el('span', { class: 'stack-s' }, [
+          el('span', { class: 'del-titel', text: d.titel }),
+          el('span', { class: 'bar' }, el('i', { style: 'width:' + Math.round(100 * dp.s / dp.max) + '%' })),
+          el('span', { class: 'del-meta' }, [el('span', { text: d.rundor.length + ' rundor' }), el('span', { text: Math.round(100 * dp.s / dp.max) + ' % klart' })])
+        ])
+      ]));
+    });
+
+    const nollBox = el('div', { class: 'row' });
+    function nollKnapp() {
+      nollBox.replaceChildren(el('button', { class: 'btn btn-quiet', type: 'button', onclick: function () {
+        nollBox.replaceChildren(
+          el('button', { class: 'btn btn-quiet', type: 'button', onclick: function () { S = nyttS(); S.day.d = idag(); save(); hem(); } }, 'Ja, börja om från noll'),
+          el('button', { class: 'btn btn-quiet', type: 'button', onclick: nollKnapp }, 'Avbryt')
+        );
+      } }, 'Nollställ alla stjärnor'));
+    }
+    nollKnapp();
+
+    show([
+      el('header', { class: 'stack-s' }, [
+        el('p', { class: 'eyebrow', text: K.amne }),
+        el('h1', { text: K.elev ? 'Hej ' + K.elev + '!' : 'Hej!' }),
+        el('p', { class: 'muted', text: 'Korta rundor. En sak i taget. Det du missar kommer tillbaka tills det sitter.' })
+      ]),
+      el('section', { class: 'hero' }, [
+        el('div', { class: 'riksdag', html: riksdagSvg(p.mandat), role: 'img', 'aria-label': M.bild + '. ' + p.mandat + ' av ' + M.antal + ' är fyllda.' }),
+        el('p', { class: 'mandat', html: 'Du har vunnit <b>' + p.mandat + '</b> av ' + M.antal + ' ' + M.enhet }),
+        el('p', { class: 'muted small center', text: p.mandat >= M.antal ? 'Alla ' + M.antal + ' är dina. Du kan det här!' : p.mandat >= M.mal ? 'Du har nått ' + M.malNamn + '! Fortsätt tills alla ' + M.antal + ' är dina.' : (M.mal - p.mandat) + ' ' + M.enhet + ' kvar till ' + M.malNamn + '. Varje stjärna ger nya ' + M.enhet + '.' }),
+        malRad(),
+        statusRad()
+      ]),
+      nasta
+        ? el('button', { class: 'btn btn-go', type: 'button', onclick: function () { startRunda(nasta); } }, [el('span', { text: 'Starta nästa runda' }), el('small', { text: 'Del ' + nasta.del.nr + ' · ' + nasta.namn })])
+        : el('button', { class: 'btn btn-go', type: 'button', onclick: blandat }, [el('span', { text: 'Kör ett blandat prov' }), el('small', { text: 'Alla rundor är klara. 10 blandade frågor.' })]),
+      el('section', { class: 'stack' }, [el('h2', { text: (['', 'En del', 'Två delar', 'Tre delar', 'Fyra delar', 'Fem delar', 'Sex delar', 'Sju delar', 'Åtta delar', 'Nio delar', 'Tio delar'][DELAR.length] || DELAR.length + ' delar') }), el('ol', { class: 'stack' }, delar)]),
+      el('section', { class: 'stack' }, [
+        el('h2', { text: 'Extra träning' }),
+        BLITZ.length ? el('button', { class: 'btn btn-quiet', type: 'button', onclick: snabbrunda }, [el('span', { html: BLIXT + ' Snabbrunda' }), el('small', { text: BLITZTID + ' sekunder. ' + (S.best.blitz ? 'Ditt rekord: ' + S.best.blitz + ' rätt' : 'Hur många hinner du?') })]) : null,
+        el('button', { class: 'btn btn-sun', type: 'button', onclick: function () { forklaraSida(FORKLARA.slice().sort(function (a, b) { return (S.ex[a.id] || 0) - (S.ex[b.id] || 0); }), 0, hem); } }, [el('span', { text: 'Förklara själv' }), el('small', { text: kvarEx ? kvarEx + ' av ' + FORKLARA.length + ' instuderingsfrågor kvar att lära dig' : 'Du kan alla ' + FORKLARA.length + ' instuderingsfrågor' })]),
+        el('button', { class: 'btn btn-quiet', type: 'button', onclick: blandat }, [el('span', { text: 'Blandat prov' }), el('small', { text: '10 blandade frågor' })]),
+        el('button', { class: 'btn btn-quiet', type: 'button', disabled: !missar.length, onclick: function () { korRunda({ rubrik: 'Träna på missar', qs: blanda(missar).slice(0, 8), tillbaka: hem }); } }, [el('span', { text: 'Träna på missar' }), el('small', { text: missar.length ? (missar.length === 1 ? '1 fråga väntar' : missar.length + ' frågor väntar') : 'Inga missar just nu' })]),
+        el('div', { class: 'row' }, [vaxel('Ljud', 'ljud'), 'vibrate' in navigator ? vaxel('Vibration', 'vib') : null])
+      ]),
+      el('details', { class: 'vuxna' }, [
+        el('summary', { text: K.vuxna.length ? K.vuxnaRubrik : 'För vuxna' }),
+        K.vuxna.length ? el('ul', { html: K.vuxna.map(function (x) { return '<li>' + x + '</li>'; }).join('') }) : null,
+        nollBox
+      ])
+    ]);
+  }
+
+  function statusRad() {
+    const ds = aktivSvit(), idagKlar = S.dagar.d === idag();
+    return el('div', { class: 'status' }, [
+      chip(ELD + ' ' + (ds ? '<b>' + ds + '</b> ' + (ds === 1 ? 'dag' : 'dagar') + ' i rad' + (idagKlar ? '' : ' · kör idag!') : 'Starta en svit idag'), ds ? '' : 'av'),
+      S.best.svit >= 3 ? chip('Rekord: <b>' + S.best.svit + '</b> rätt i rad') : null,
+      nivaRad()
+    ]);
+  }
+  function vaxel(namn, nyckel) {
+    const text = function () { return namn + ': ' + (PREF[nyckel] ? 'på' : 'av'); };
+    const b = el('button', { class: 'btn-las', type: 'button', 'aria-pressed': String(PREF[nyckel]), onclick: function () {
+      PREF[nyckel] = !PREF[nyckel];
+      try { localStorage.setItem(PKEY, JSON.stringify(PREF)); } catch (e) { /* ok */ }
+      b.setAttribute('aria-pressed', String(PREF[nyckel])); b.textContent = text();
+      if (PREF[nyckel]) { if (nyckel === 'ljud') ljud('ratt'); else vib(20); }
+    } }, text());
+    return b;
+  }
+
+  function blandat() { korRunda({ rubrik: 'Blandat prov', qs: blanda(ALLA).slice(0, 10), tillbaka: hem }); }
+
+  /* ───── En del ───── */
+  function delSida(d) {
+    const kanEx = d.forklara.filter(function (f) { return S.ex[f.id] === 2; }).length;
+    show([
+      el('button', { class: 'btn-link', type: 'button', onclick: hem }, '← Alla delar'),
+      el('header', { class: 'stack-s' }, [el('p', { class: 'eyebrow', text: 'Del ' + d.nr }), el('h1', { text: d.titel })]),
+      el('section', { class: 'steg' }, [
+        el('h2', { text: '1. Läs korten' }),
+        el('p', { class: 'muted small', text: d.kort.length + ' korta kort med minnesknep. Tar några minuter.' }),
+        el('button', { class: 'btn btn-quiet', type: 'button', onclick: function () { kortSida(d, 0); } }, 'Öppna korten')
+      ]),
+      el('section', { class: 'steg' }, [
+        el('h2', { text: '2. Kör rundorna' }),
+        el('p', { class: 'muted small', text: 'Tre stjärnor om du klarar alla frågor på första försöket.' }),
+        el('ol', { class: 'stack' }, d.rundor.map(function (r) {
+          return el('li', null, el('button', { class: 'runda', type: 'button', onclick: function () { startRunda(r); } }, [
+            el('span', { class: 'stack-s' }, [el('span', { class: 'runda-namn', text: r.namn }), el('span', { class: 'muted small', text: r.q.length + ' frågor' })]),
+            stjarnor(S.stars[r.id] || 0)
+          ]));
+        }))
+      ]),
+      el('section', { class: 'steg' }, [
+        el('h2', { text: '3. Förklara själv' }),
+        el('p', { class: 'muted small', text: 'Frågorna från instuderingsbladet. Här tränar du på att förklara med egna ord. Du kan ' + kanEx + ' av ' + d.forklara.length + '.' }),
+        el('button', { class: 'btn btn-sun', type: 'button', onclick: function () { forklaraSida(d.forklara, 0, function () { delSida(d); }); } }, 'Träna på instuderingsfrågorna')
+      ])
+    ]);
+  }
+
+  /* ───── Faktakort ───── */
+  function kortSida(d, i) {
+    const k = d.kort[i];
+    let kort, lasText;
+    if (k.profil) {
+      /* Profilkort: en sak med ett märke och några etikett/värde-rader (parti, grundämne, land, person ...) */
+      const p = k.profil;
+      kort = el('article', { class: 'kort' }, [
+        el('div', { class: 'parti-topp' }, [
+          el('span', { class: 'pchip', style: 'background:' + (p.bg || 'var(--sea)') + ';color:' + (p.fg || 'var(--on-sea)'), text: p.chip }),
+          el('h2', { text: p.rubrik })
+        ]),
+        el('dl', { class: 'fakta' }, p.rader.reduce(function (acc, r) { return acc.concat([el('dt', { text: r[0] }), el('dd', { text: r[1] })]); }, []))
+      ].concat(p.knep ? [el('p', { class: 'knep' }, [el('span', { class: 'knep-rubrik', text: 'Minnesknep' }), p.knep])] : []));
+      lasText = p.rubrik + '. ' + p.rader.map(function (r) { return r[0] + ': ' + r[1]; }).join('. ') + (p.knep ? '. Minnesknep: ' + p.knep : '');
+    } else {
+      kort = el('article', { class: 'kort' }, [el('h2', { text: k.h })]
+        .concat(k.t.map(function (t) { return el('p', { html: t }); }))
+        .concat(k.knep ? [el('p', { class: 'knep' }, [el('span', { class: 'knep-rubrik', text: 'Minnesknep' }), k.knep])] : []));
+      lasText = k.h + '. ' + k.t.map(ren).join(' ') + (k.knep ? ' Minnesknep: ' + k.knep : '');
+    }
+    const sista = i === d.kort.length - 1;
+    show([
+      el('div', { class: 'top' }, [
+        el('button', { class: 'x', type: 'button', 'aria-label': 'Stäng korten', onclick: function () { delSida(d); } }, '×'),
+        el('span', { class: 'bar' }, el('i', { style: 'width:' + Math.round(100 * (i + 1) / d.kort.length) + '%' })),
+        el('span', { class: 'count', text: (i + 1) + ' / ' + d.kort.length })
+      ]),
+      kort,
+      lasKnapp(lasText),
+      el('div', { class: 'nav2' }, [
+        el('button', { class: 'btn btn-quiet', type: 'button', disabled: i === 0, onclick: function () { kortSida(d, i - 1); } }, 'Tillbaka'),
+        sista
+          ? el('button', { class: 'btn btn-go', type: 'button', onclick: function () { startRunda(d.rundor[0]); } }, 'Starta första rundan')
+          : el('button', { class: 'btn btn-go', type: 'button', onclick: function () { kortSida(d, i + 1); } }, 'Nästa kort')
+      ])
+    ]);
+  }
+
+  /* ───── Frågetyper. Varje funktion ritar svarsdelen och anropar klar(ratt) ───── */
+  const RITA = {
+    mc: function (q, klar) {
+      const opts = blanda(q.a.map(function (txt, i) { return { txt: txt, ratt: i === 0 }; }));
+      const kort = opts.length === 2 && opts.every(function (o) { return o.txt.length < 12; });
+      const box = el('div', { class: 'opts' + (kort ? ' two' : '') });
+      opts.forEach(function (o) {
+        o.b = el('button', { class: 'opt', type: 'button', onclick: function () {
+          opts.forEach(function (x) { x.b.disabled = true; if (x.ratt) { x.b.classList.add('ok'); x.b.append(el('span', { class: 'mark', text: 'Rätt' })); } });
+          if (!o.ratt) { o.b.classList.add('no'); o.b.append(el('span', { class: 'mark', text: 'Fel' })); }
+          klar(o.ratt);
+        } }, el('span', { text: mjuk(o.txt) }));
+        box.append(o.b);
+      });
+      return { nod: box, tips: 'Välj ett svar', las: q.q + ' ' + opts.map(function (o) { return o.txt; }).join('. ') };
+    },
+    tf: function (q, klar) {
+      const box = el('div', { class: 'opts two' });
+      [['Sant', true], ['Falskt', false]].forEach(function (p) {
+        const b = el('button', { class: 'opt', type: 'button', onclick: function () {
+          Array.prototype.forEach.call(box.children, function (x) { x.disabled = true; });
+          const ratt = p[1] === q.c;
+          b.classList.add(ratt ? 'ok' : 'no');
+          klar(ratt);
+        } }, el('span', { text: p[0] }));
+        box.append(b);
+      });
+      return { nod: box, tips: 'Sant eller falskt?', las: 'Sant eller falskt? ' + q.q };
+    },
+    multi: function (q, klar) {
+      const opts = blanda(q.a.map(function (txt, i) { return { txt: txt, ratt: i < q.n, vald: false }; }));
+      const box = el('div', { class: 'opts' });
+      const ratta = el('button', { class: 'btn btn-go', type: 'button', disabled: true, onclick: function () {
+        ratta.hidden = true;
+        let allt = true;
+        opts.forEach(function (o) {
+          o.b.disabled = true;
+          if (o.vald && o.ratt) { o.b.classList.add('ok'); o.b.append(el('span', { class: 'mark', text: 'Rätt' })); }
+          else if (o.vald && !o.ratt) { o.b.classList.remove('sel'); o.b.classList.add('no'); o.b.append(el('span', { class: 'mark', text: 'Fel' })); allt = false; }
+          else if (!o.vald && o.ratt) { o.b.classList.add('miss'); o.b.append(el('span', { class: 'mark', text: 'Den här också' })); allt = false; }
+        });
+        klar(allt);
+      } }, 'Rätta');
+      function uppdatera() {
+        const n = opts.filter(function (o) { return o.vald; }).length;
+        ratta.disabled = n !== q.n;
+        ratta.textContent = n === q.n ? 'Rätta' : 'Välj ' + TAL[q.n] + ' (' + n + ' av ' + q.n + ')';
+      }
+      opts.forEach(function (o) {
+        o.b = el('button', { class: 'opt', type: 'button', 'aria-pressed': 'false', onclick: function () {
+          o.vald = !o.vald; o.b.classList.toggle('sel', o.vald); o.b.setAttribute('aria-pressed', String(o.vald)); uppdatera();
+        } }, el('span', { text: mjuk(o.txt) }));
+        box.append(o.b);
+      });
+      uppdatera();
+      return { nod: el('div', { class: 'stack' }, [box, ratta]), tips: 'Välj ' + TAL[q.n], las: q.q + ' Välj ' + TAL[q.n] + '. ' + opts.map(function (o) { return o.txt; }).join('. ') };
+    },
+    match: function (q, klar) {
+      const V = q.par.map(function (p, i) { return { i: i, txt: p[0], sida: 'v' }; });
+      const H = blanda(q.par.map(function (p, i) { return { i: i, txt: p[1], sida: 'h' }; }));
+      let vald = null, fel = 0, kvar = q.par.length, nr = 0;
+      function tryck(o) {
+        if (vald && vald.sida === o.sida) {
+          vald.b.classList.remove('sel');
+          if (vald === o) { vald = null; return; }
+          vald = o; o.b.classList.add('sel'); return;
+        }
+        if (!vald) { vald = o; o.b.classList.add('sel'); return; }
+        const a = vald; a.b.classList.remove('sel'); vald = null;
+        if (a.i === o.i) {
+          nr++; kvar--;
+          [a, o].forEach(function (x) { x.b.classList.add('ok'); x.b.disabled = true; x.b.append(el('span', { class: 'mark', text: nr })); });
+          if (!kvar) klar(fel <= 1);
+        } else { fel++; skak(a.b); skak(o.b); }
+      }
+      function kol(lista) {
+        return el('div', { class: 'stack' }, lista.map(function (o) {
+          o.b = el('button', { class: 'opt', type: 'button', onclick: function () { tryck(o); } }, el('span', { text: mjuk(o.txt) }));
+          return o.b;
+        }));
+      }
+      return { nod: el('div', { class: 'match' }, [kol(V), kol(H)]), tips: 'Para ihop. Tryck på en till vänster och sedan rätt till höger', las: q.q + ' ' + V.map(function (o) { return o.txt; }).join(', ') + '. Alternativ: ' + H.map(function (o) { return o.txt; }).join('. ') };
+    },
+    order: function (q, klar) {
+      let items = blanda(q.steg.map(function (txt, i) { return { i: i, txt: txt }; }));
+      if (items.every(function (o, k) { return o.i === k; })) items = items.reverse();
+      let nasta = 0, fel = 0;
+      const lagda = el('ol', { class: 'placed' });
+      const pool = el('div', { class: 'opts' });
+      items.forEach(function (o) {
+        o.b = el('button', { class: 'opt', type: 'button', onclick: function () {
+          if (o.i === nasta) {
+            nasta++; o.b.remove(); lagda.append(el('li', { text: o.txt }));
+            if (nasta === q.steg.length) klar(fel <= 1);
+          } else { fel++; skak(o.b); }
+        } }, el('span', { text: mjuk(o.txt) }));
+        pool.append(o.b);
+      });
+      return { nod: el('div', { class: 'stack' }, [lagda, pool]), tips: 'Tryck på det som kommer först, sedan nästa', las: q.q + ' ' + items.map(function (o) { return o.txt; }).join('. ') };
+    }
+  };
+
+  /* ───── En runda ───── */
+  const BEROM = ['Rätt!', 'Precis!', 'Snyggt!', 'Helt rätt!', 'Japp!', 'Där satt den!'];
+  function startRunda(r) { korRunda({ rubrik: 'Del ' + r.del.nr + ' · ' + r.namn, qs: r.q, runda: r, tillbaka: function () { delSida(r.del); } }); }
+
+  function korRunda(o) {
+    const ko = o.qs.slice(), total = ko.length, missat = {};
+    let klara = 0, fel = 0, svit = 0, basta = 0, xp = 0;
+    const nivStart = niva(S.xp).n;
+
+    function visa() {
+      if (!ko.length) return slut();
+      const q = ko[0];
+      const fbBox = el('div', { class: 'stack', 'aria-live': 'polite' });
+      const chipEl = el('span', { class: 'svit-chip', hidden: svit < 2, 'aria-label': svit + ' rätt i rad', html: ELD + svit });
+      const r = RITA[q.t](q, function (ratt) {
+        const forst = !missat[q.id];
+        if (ratt) { if (forst) delete S.miss[q.id]; svit++; basta = Math.max(basta, svit); const g = forst ? 10 + (svit >= 3 ? 5 : 0) : 5; xp += g; S.xp += g; }
+        else { if (forst) fel++; missat[q.id] = 1; S.miss[q.id] = 1; svit = 0; }
+        save();
+        const fest = ratt && svit >= 3 && (svit === 3 || svit % 5 === 0) ? svit : 0;
+        respons(ratt, fest);
+        chipEl.hidden = svit < 2; chipEl.innerHTML = ELD + svit; chipEl.setAttribute('aria-label', svit + ' rätt i rad'); if (ratt) bump(chipEl);
+        if (fest) konfetti(36);
+        const sista = ratt && ko.length === 1;
+        const nb = el('button', { class: 'btn btn-go', type: 'button', onclick: function () {
+          ko.shift(); if (ratt) klara++; else ko.push(q); visa();
+        } }, sista ? 'Se resultatet' : 'Nästa fråga');
+        fbBox.append(
+          el('div', { class: 'fb ' + (ratt ? 'ok' : 'no') }, [
+            fest ? el('p', { class: 'fest', html: ELD + ' ' + fest + ' rätt i rad!' + (fest >= 10 ? ' Ostoppbar.' : fest >= 5 ? ' Du är het!' : '') }) : null,
+            el('h3', { text: ratt ? BEROM[Math.floor(Math.random() * BEROM.length)] : 'Inte riktigt' }),
+            el('p', { text: q.why }),
+            !ratt && el('p', { class: 'small muted', text: 'Frågan kommer tillbaka en gång till.' })
+          ]),
+          nb
+        );
+        try { nb.focus({ preventScroll: true }); nb.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) { /* ok */ }
+      });
+      show([
+        el('div', { class: 'top' }, [
+          el('button', { class: 'x', type: 'button', 'aria-label': 'Avsluta rundan', onclick: o.tillbaka }, '×'),
+          el('span', { class: 'bar', role: 'progressbar', 'aria-valuemin': '0', 'aria-valuemax': String(total), 'aria-valuenow': String(klara), 'aria-label': 'Klara frågor' }, el('i', { style: 'width:' + Math.round(100 * klara / total) + '%' })),
+          chipEl,
+          el('span', { class: 'count', text: klara + ' / ' + total })
+        ]),
+        el('p', { class: 'eyebrow', text: o.rubrik }),
+        el('section', { class: 'q' }, [
+          el('p', { class: 'tips', text: r.tips }),
+          el('h2', { class: 'q-text', text: q.q }),
+          lasKnapp(r.las),
+          r.nod
+        ]),
+        fbBox
+      ]);
+    }
+
+    function slut() {
+      const st = fel === 0 ? 3 : fel <= 2 ? 2 : 1;
+      const fore = poang().mandat;
+      if (o.runda && st > (S.stars[o.runda.id] || 0)) S.stars[o.runda.id] = st;
+      const bonus = o.runda ? st * 10 : 10; xp += bonus; S.xp += bonus;
+      const nySvit = basta >= 3 && basta > (S.best.svit || 0); if (basta > (S.best.svit || 0)) S.best.svit = basta;
+      const nyDag = dagSvit();
+      dagKoll(); S.day.n++; save();
+      const efter = poang().mandat;
+      const nyNiva = niva(S.xp).n > nivStart;
+      const milstolpe = !o.runda ? null : fore < M.antal && efter >= M.antal ? 'Alla ' + M.antal + ' ' + M.enhet + '!' : fore < M.mal && efter >= M.mal ? M.malNamn.charAt(0).toUpperCase() + M.malNamn.slice(1) + '!' : null;
+      const idx = o.runda ? RUNDOR.indexOf(o.runda) : -1;
+      const nasta = idx >= 0 ? RUNDOR[idx + 1] : null;
+      const malKlart = S.day.n === DAGSMAL;
+      show([
+        el('section', { class: 'resultat' }, [
+          el('p', { class: 'eyebrow', text: o.rubrik }),
+          stjarnor(st, true),
+          el('h1', { text: st === 3 ? 'Alla rätt på första försöket!' : st === 2 ? 'Bra jobbat! Nästan felfritt.' : 'Rundan är klar!' }),
+          el('p', { text: st === 3 ? 'Du klarade ' + total + ' frågor utan en enda miss.' : 'Du rättade till ' + fel + ' ' + (fel === 1 ? 'miss' : 'missar') + ' och klarade alla ' + total + ' frågor till slut.' + (st === 1 ? ' Missarna kommer tillbaka tills de sitter.' : '') }),
+          milstolpe ? el('div', { class: 'milstolpe' }, [el('h2', { text: milstolpe }), el('p', { text: efter >= M.antal ? 'Du har vunnit allt. Du kan det här!' : 'Du har passerat ' + M.mal + ' ' + M.enhet + '. Nu tar vi resten.' })]) : null,
+          o.runda && efter > fore ? el('div', { class: 'riksdag', html: riksdagSvg(efter, fore), role: 'img', 'aria-label': M.bild + '. ' + efter + ' av ' + M.antal + ' är fyllda.' }) : null,
+          o.runda && efter > fore ? el('p', { class: 'mandat', html: '+' + (efter - fore) + ' ' + M.enhet + '. Nu har du <b>' + efter + '</b> av ' + M.antal + '.' }) : null,
+          vinster(xp, basta, nySvit, nyDag, nyNiva),
+          malRad(),
+          malKlart ? el('p', { class: 'small', text: 'Dagens mål är klart. Ta en paus: res dig, drick lite vatten. Du har gjort det bra.' }) : null
+        ]),
+        nasta ? el('button', { class: 'btn btn-go', type: 'button', onclick: function () { startRunda(nasta); } }, [el('span', { text: 'Nästa runda' }), el('small', { text: 'Del ' + nasta.del.nr + ' · ' + nasta.namn })]) : null,
+        st < 3 && o.runda ? el('button', { class: 'btn btn-quiet', type: 'button', onclick: function () { startRunda(o.runda); } }, 'Kör om rundan för tre stjärnor') : null,
+        !o.runda ? el('button', { class: 'btn btn-go', type: 'button', onclick: blandat }, 'Ett blandat prov till') : null,
+        el('button', { class: 'btn btn-quiet', type: 'button', onclick: hem }, 'Till startsidan')
+      ]);
+      if (st === 3 || malKlart || nyNiva || milstolpe) { konfetti(milstolpe ? 140 : 70); respons(true, true); }
+    }
+    visa();
+  }
+
+  /* ───── Snabbrunda: så många rätt som möjligt på 60 sekunder. Bara snabba frågetyper. ───── */
+  const BLITZ = ALLA.filter(function (q) { return q.t === 'mc' || q.t === 'tf'; });
+  const BLITZTID = 60;
+  function snabbrunda() {
+    let ko = blanda(BLITZ), ratt = 0, svar = 0, svit = 0, basta = 0, xp = 0, slut = false;
+    const nivStart = niva(S.xp).n, slutar = Date.now() + BLITZTID * 1000;
+    const fyll = el('i', { style: 'width:100%' });
+    const tid = el('span', { class: 'count', text: BLITZTID + ' s' });
+    const poangEl = el('span', { class: 'svit-chip', 'aria-live': 'polite', html: BLIXT + '0' });
+    const top = el('div', { class: 'top' }, [el('button', { class: 'x', type: 'button', 'aria-label': 'Avsluta snabbrundan', onclick: hem }, '×'), el('span', { class: 'bar blitz' }, fyll), poangEl, tid]);
+    const yta = el('div', { class: 'stack' });
+    show([top, el('p', { class: 'eyebrow', text: 'Snabbrunda · så många rätt du hinner' }), yta]);
+    const timer = setInterval(function () {
+      if (!top.isConnected) return clearInterval(timer);
+      const kvar = Math.max(0, slutar - Date.now());
+      fyll.style.width = (100 * kvar / (BLITZTID * 1000)) + '%';
+      tid.textContent = Math.ceil(kvar / 1000) + ' s';
+      top.classList.toggle('brad', kvar <= 10000);
+      if (!kvar) { clearInterval(timer); slut = true; klar(); }
+    }, 200);
+    function nasta() {
+      if (slut || !top.isConnected) return;
+      if (!ko.length) ko = blanda(BLITZ);
+      const q = ko.shift();
+      const r = RITA[q.t](q, function (ok) {
+        svar++;
+        if (ok) { ratt++; svit++; basta = Math.max(basta, svit); const g = 10 + (svit >= 3 ? 5 : 0); xp += g; S.xp += g; delete S.miss[q.id]; }
+        else { svit = 0; S.miss[q.id] = 1; }
+        save(); respons(ok, ok && svit >= 5 && svit % 5 === 0);
+        poangEl.innerHTML = BLIXT + ratt; if (ok) bump(poangEl);
+        setTimeout(nasta, ok ? 350 : 1100);
+      });
+      yta.replaceChildren(el('section', { class: 'q' }, [el('h2', { class: 'q-text', text: q.q }), r.nod]));
+    }
+    function klar() {
+      const forra = S.best.blitz || 0, rekord = ratt > forra;
+      if (rekord) S.best.blitz = ratt;
+      const nySvit = basta >= 3 && basta > (S.best.svit || 0); if (basta > (S.best.svit || 0)) S.best.svit = basta;
+      const nyDag = svar ? dagSvit() : false;
+      if (ratt) { dagKoll(); S.day.n++; }
+      save();
+      show([
+        el('section', { class: 'resultat' }, [
+          el('p', { class: 'eyebrow', text: 'Snabbrunda' }),
+          el('p', { class: 'blitz-tal', text: ratt }),
+          el('h1', { text: rekord ? (forra ? 'Nytt rekord!' : 'Ditt första rekord!') : ratt ? ratt + ' rätt på ' + BLITZTID + ' sekunder' : 'Tiden tog slut' }),
+          el('p', { text: svar ? ratt + ' av ' + svar + ' rätt. ' + (rekord ? (forra ? 'Förra rekordet var ' + forra + '.' : 'Nu har du något att slå.') : 'Ditt rekord är ' + forra + '. ' + (forra - ratt <= 2 ? 'Du var nära!' : 'Kör igen!')) : 'Svara så snabbt du kan nästa gång.' }),
+          svar > ratt ? el('p', { class: 'small muted', text: 'Missarna väntar i Träna på missar.' }) : null,
+          vinster(xp, basta, nySvit, nyDag, niva(S.xp).n > nivStart),
+          malRad()
+        ]),
+        el('button', { class: 'btn btn-go', type: 'button', onclick: snabbrunda }, S.best.blitz ? 'Kör igen och slå ' + S.best.blitz : 'Kör igen'),
+        el('button', { class: 'btn btn-quiet', type: 'button', onclick: hem }, 'Till startsidan')
+      ]);
+      if (rekord) { konfetti(); respons(true, true); }
+    }
+    nasta();
+  }
+
+  /* ───── Förklara själv: instuderingsfrågorna med facit ───── */
+  function forklaraSida(lista, i, tillbaka) {
+    if (i >= lista.length) {
+      const kan = lista.filter(function (f) { return S.ex[f.id] === 2; }).length;
+      dagSvit(); save();
+      show([
+        el('section', { class: 'resultat' }, [
+          el('p', { class: 'eyebrow', text: 'Förklara själv' }),
+          el('h1', { text: kan === lista.length ? 'Du kan alla!' : 'Bra tränat!' }),
+          el('p', { text: 'Du kan ' + kan + ' av ' + lista.length + ' frågor. De andra kommer först nästa gång.' })
+        ]),
+        el('button', { class: 'btn btn-go', type: 'button', onclick: tillbaka }, 'Klar')
+      ]);
+      if (kan === lista.length) konfetti();
+      return;
+    }
+    const f = lista[i];
+    const facit = el('div', { class: 'stack', hidden: true });
+    const visaBtn = el('button', { class: 'btn btn-go', type: 'button', onclick: function () {
+      visaBtn.hidden = true; facit.hidden = false;
+      try { facit.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) { /* ok */ }
+    } }, 'Visa facit');
+
+    facit.append(
+      el('section', { class: 'q' }, [
+        el('h3', { text: 'Bocka i det du fick med' }),
+        el('div', { class: 'stack' }, f.punkter.map(function (p, k) {
+          const id = 'chk-' + f.id + '-' + k;
+          return el('label', { class: 'check', for: id }, [el('input', { type: 'checkbox', id: id }), el('span', { text: p })]);
+        })),
+        el('div', { class: 'atip' }, [el('span', { class: 'knep-rubrik', text: 'Så lyfter du svaret mot A' }), el('p', { text: f.a })]),
+        lasKnapp(f.punkter.join(' ') + ' Så lyfter du svaret mot A: ' + f.a)
+      ]),
+      el('h3', { text: 'Hur gick det?' }),
+      el('div', { class: 'betyg' }, [['Kunde det', 2, 'btn-go'], ['Nästan', 1, 'btn-sun'], ['Inte än', 0, 'btn-quiet']].map(function (b) {
+        return el('button', { class: 'btn ' + b[2], type: 'button', onclick: function () { S.ex[f.id] = b[1]; S.xp += b[1] * 5; save(); forklaraSida(lista, i + 1, tillbaka); } }, b[0]);
+      }))
+    );
+
+    show([
+      el('div', { class: 'top' }, [
+        el('button', { class: 'x', type: 'button', 'aria-label': 'Avsluta', onclick: tillbaka }, '×'),
+        el('span', { class: 'bar' }, el('i', { style: 'width:' + Math.round(100 * i / lista.length) + '%' })),
+        el('span', { class: 'count', text: (i + 1) + ' / ' + lista.length })
+      ]),
+      el('p', { class: 'eyebrow', text: 'Del ' + f.del.nr + (f.extra ? ' · Extrafråga ur begreppslistan' : ' · Förklara själv') }),
+      el('section', { class: 'q' }, [
+        el('h2', { class: 'q-text', text: f.q }),
+        lasKnapp(f.q),
+        el('p', { class: 'small muted', text: 'Säg svaret högt, som om du förklarar för en kompis. Följ receptet:' }),
+        el('ol', { class: 'recept' }, ['1 Rätt begrepp', '2 Vad det betyder', '3 Ett exempel', '4 Varför'].map(function (t) { return el('li', { text: t }); }))
+      ]),
+      visaBtn,
+      facit
+    ]);
+  }
+
+  hem();
+})();
+
+</script>
+</body></html>
